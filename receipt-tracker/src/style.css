@@ -1,0 +1,95 @@
+/* src/styles.css */
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.form-container {
+    background: white;
+    padding: 30px; /* Increased padding for a more spacious look */
+    border-radius: 8px; /* Slightly rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Deeper shadow for a more prominent effect */
+    width: 350px; 
+    text-align: center; 
+}
+
+h2 {
+    margin-bottom: 20px; /* Space between title and form */
+    color: #333; /* Darker color for better visibility */
+}
+
+input {
+    width: 92%;
+    padding: 12px; /* Increased padding for better touch targets */
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s; /* Smooth border transition */
+}
+
+input:focus {
+    border-color: #007bff; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+button {
+    padding: 12px; /* Increased padding */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 95%; 
+    margin: 10px auto;
+    display: block; 
+    text-align: center; 
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+/* src/styles.css */
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.toggle-button {
+    background-color: transparent; 
+    color: #007bff; 
+    border: none; 
+    text-align: center; 
+    cursor: pointer; 
+    width: 80%; 
+    margin: 10px auto; 
+    display: block; 
+}
+
+button:disabled {
+    background-color: rgba(0, 123, 255, 0.5); /* Semi-transparent when disabled */
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}
+
+/* src/styles.css */
+.forgot-password {
+    text-align: left; /* Aligns the text to the left */
+    width: 100%; /* Makes sure it takes the full width of the container */
+    margin-top: 5px; /* Space between the password input and the link */
+}
+
+.forgot-password-link {
+    color: #007bff; 
+    text-decoration: none; 
+    transition: color 0.3s; /* Smooth color transition */
+}
+
