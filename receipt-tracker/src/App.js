@@ -6,9 +6,10 @@ import SignUp from './SignUp/SignUp';
 import SignIn from './SignIn/SignIn';
 import Dashboard from './MainPage/MainPage'; 
 import './style.css'; 
+import ManualUpload from './MainPage/ManualUpload';
 
 const App = () => {
-    const [isSignUp, setIsSignUp] = useState(true);
+    const [isSignUp, setIsSignUp] = useState(false);
     const [user, setUser] = useState(null); 
     const [loading, setLoading] = useState(true); // Added loading state
 
@@ -37,6 +38,7 @@ const App = () => {
                     <Route path="/" element={isSignUp ? <SignUp toggleForm={toggleForm} /> : <SignIn toggleForm={toggleForm} />} />
                     <Route path="/signin" element={<SignIn toggleForm={toggleForm} />} />
                     <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/signin" />} />
+                    <Route path="/record" element={user ? <ManualUpload /> : <Navigate to="/signin" />} />
                 </Routes>
             </div>
         </Router>

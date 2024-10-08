@@ -4,6 +4,10 @@ import Tesseract from 'tesseract.js';
 import { getFirestore, collection, addDoc, getDocs, doc, getDoc, deleteDoc } from 'firebase/firestore';
 import '../MainPage.css';
 import SignOut from '../SignOut';  // Import the new SignOut component
+import ManualUpload from './ManualUpload';
+import { useNavigate } from "react-router-dom";
+
+
 
 const db = getFirestore();
 
@@ -107,6 +111,7 @@ const Dashboard = ({ user, onSignOut }) => {
             console.error('Error deleting receipt: ', error);
         }
     };
+    const navigate = useNavigate()
 
     return (
         <div>
@@ -115,12 +120,21 @@ const Dashboard = ({ user, onSignOut }) => {
                 {/* Use the SignOut component */}
                 <SignOut onSignOut={onSignOut} /> 
             </div>
+            {/* <div>
+                <ManualUpload/>
+            </div> */}
+            <button
+                onClick={() => navigate("/record")}
+            >
+                Manual Upload
+            </button>
             <div className="dashboard-title">
                 <h2>Dashboard</h2>
             </div>
             <button onClick={() => setShowCamera(!showCamera)}>
                 {showCamera ? 'Switch to Upload' : 'Scan with Camera'}
             </button>
+
             {showCamera ? (
                 <CameraCapture onCapture={handleCapture} />
             ) : (
