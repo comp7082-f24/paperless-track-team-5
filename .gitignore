@@ -1,0 +1,16 @@
+# Frontend
+**/node_modules/
+**/build/
+**/dist/
+
+
+# Backend
+**/venv
+**/.venv
+**/__pycache__/
+**/.pytest_cache/
+
+
+**/.vscode/
+**/.env
+**/.env.*
