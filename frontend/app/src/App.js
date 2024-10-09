@@ -4,31 +4,31 @@ import { auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth'; 
 import SignUp from './SignUp/SignUp';
 import SignIn from './SignIn/SignIn';
+import ForgotPassword from './ForgotPassword';
 import Dashboard from './MainPage/MainPage'; 
 import './style.css'; 
-import ManualUpload from './MainPage/ManualUpload';
 
 const App = () => {
-    const [isSignUp, setIsSignUp] = useState(false);
+    const [isSignUp, setIsSignUp] = useState(false); 
     const [user, setUser] = useState(null); 
-    const [loading, setLoading] = useState(true); // Added loading state
+    const [loading, setLoading] = useState(true); 
 
     const toggleForm = () => {
-        setIsSignUp(!isSignUp);
+        setIsSignUp(!isSignUp); 
     };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            console.log('User state changed:', currentUser); // Log user state
-            setLoading(false); // Set loading to false when user state changes
+            console.log('User state changed:', currentUser); 
+            setLoading(false);
         });
 
         return () => unsubscribe(); 
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>; // Show a loading message while checking auth state
+        return <div>Loading...</div>; 
     }
 
     return (
@@ -37,8 +37,9 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={isSignUp ? <SignUp toggleForm={toggleForm} /> : <SignIn toggleForm={toggleForm} />} />
                     <Route path="/signin" element={<SignIn toggleForm={toggleForm} />} />
+                    <Route path="/signup" element={<SignUp toggleForm={toggleForm} />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} /> 
                     <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/signin" />} />
-                    <Route path="/record" element={user ? <ManualUpload /> : <Navigate to="/signin" />} />
                 </Routes>
             </div>
         </Router>
