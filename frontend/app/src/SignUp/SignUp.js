@@ -1,18 +1,21 @@
 // src/SignUp/SignUp.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { auth } from '../firebaseConfig'; 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore'; // Import Firestore functions
+import { getFirestore, doc, setDoc } from 'firebase/firestore'; 
 
-const db = getFirestore(); // Initialize Firestore
+const db = getFirestore(); 
 
 const SignUp = ({ toggleForm }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState(''); // New state for username
-    const [incomeType, setIncomeType] = useState(''); // New state for dropdown
+    const [username, setUsername] = useState('');
+    const [incomeType, setIncomeType] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    
+    const navigate = useNavigate(); // Initialize navigate hook
 
     const handleSignUp = async (e) => {
         e.preventDefault();
@@ -25,12 +28,13 @@ const SignUp = ({ toggleForm }) => {
 
             // Store user info in Firestore
             await setDoc(doc(db, 'users', user.uid), {
-                username, // Save username
+                username, 
                 email,
                 incomeType,
             });
 
             alert('Sign-up successful! Please sign in.');
+            navigate('/signin'); // Redirect to SignIn page after successful sign-up
         } catch (err) {
             setError(err.message);
         } finally {
@@ -44,7 +48,7 @@ const SignUp = ({ toggleForm }) => {
             <form onSubmit={handleSignUp}>
                 <input
                     type="text"
-                    placeholder="Username" // Username input
+                    placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
