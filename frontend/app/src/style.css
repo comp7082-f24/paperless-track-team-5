@@ -1,5 +1,4 @@
 /* src/styles.css */
-
 .app-container {
     display: flex;
     flex-direction: column;
@@ -11,34 +10,34 @@
 
 .form-container {
     background: white;
-    padding: 30px; /* Increased padding for a more spacious look */
-    border-radius: 8px; /* Slightly rounded corners */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Deeper shadow for a more prominent effect */
+    padding: 30px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); 
     width: 350px; 
     text-align: center; 
 }
 
 h2 {
-    margin-bottom: 20px; /* Space between title and form */
-    color: #333; /* Darker color for better visibility */
+    margin-bottom: 20px; 
+    color: #333; 
 }
 
 input {
     width: 92%;
-    padding: 12px; /* Increased padding for better touch targets */
+    padding: 12px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
-    transition: border-color 0.3s; /* Smooth border transition */
+    transition: border-color 0.3s;
 }
 
 input:focus {
-    border-color: #007bff; /* Change border color on focus */
-    outline: none; /* Remove default outline */
+    border-color: #007bff; 
+    outline: none; 
 }
 
 button {
-    padding: 12px; /* Increased padding */
+    padding: 12px; 
     background-color: #007bff;
     color: white;
     border: none;
@@ -48,10 +47,9 @@ button {
     margin: 10px auto;
     display: block; 
     text-align: center; 
-    transition: background-color 0.3s; /* Smooth background transition */
+    transition: background-color 0.3s; 
 }
 
-/* src/styles.css */
 select {
     width: 100%;
     padding: 10px;
@@ -72,7 +70,7 @@ select {
 }
 
 button:disabled {
-    background-color: rgba(0, 123, 255, 0.5); /* Semi-transparent when disabled */
+    background-color: rgba(0, 123, 255, 0.5); 
 }
 
 .error {
@@ -80,16 +78,15 @@ button:disabled {
     font-size: 0.9em;
 }
 
-/* src/styles.css */
 .forgot-password {
-    text-align: left; /* Aligns the text to the left */
-    width: 100%; /* Makes sure it takes the full width of the container */
-    margin-top: 5px; /* Space between the password input and the link */
+    text-align: left; 
+    width: 100%;
+    margin-top: 5px; 
 }
 
 .forgot-password-link {
     color: #007bff; 
     text-decoration: none; 
-    transition: color 0.3s; /* Smooth color transition */
+    transition: color 0.3s; 
 }
 
