@@ -1,60 +1,100 @@
 /* src/MainPage/MainPage.css */
-
 .header {
     display: flex;
-    justify-content: space-between; /* Space between title and sign-out button */
-    align-items: center; /* Align items vertically */
-    padding: 10px; /* Add padding */
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px; 
 }
+
+.receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.receipt-table th, .receipt-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.receipt-table th {
+    background-color: #f2f2f2;
+}
+
+.receipt-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.receipt-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.item-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+
+.total-amount {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+
 
 .dashboard-title {
     position: absolute;
-    top: 10px;  /* Adjust the distance from the top */
-    left: 10px;  /* Adjust the distance from the left */
+    top: 10px;  
+    left: 10px;  
     font-size: 24px;
     font-weight: bold;
-    color: #333; /* Optional: adjust text color */
+    color: #333; 
 }
 
 
 /* Center container for welcome message, scan, upload, and receipts */
 .center-content {
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    justify-content: flex-start; /* Align items to start from the top */
-    align-items: center; /* Center horizontally */
-    margin-top: 20px; /* Space from the top */
+    flex-direction: column; 
+    justify-content: flex-start; 
+    align-items: center; 
+    margin-top: 20px; 
 }
 
 /* Styling for the welcome message */
 .center-content h1 {
-    margin-bottom: 20px; /* Space below welcome message */
+    margin-bottom: 20px; 
 }
 
 /* Button styling */
 .center-content button {
-    margin-bottom: 20px; /* Space below buttons */
+    margin-bottom: 20px; 
 }
 
 /* Upload container styling */
 .upload-container {
     width: 400px;
-    border: 2px dashed #ccc; /* Dashed border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 20px; /* Padding for better aesthetics */
-    text-align: center; /* Center text */
-    cursor: pointer; /* Change cursor to pointer */
-    margin: 20px 0; /* Spacing around the container */
-    transition: background-color 0.3s; /* Smooth background color change */
+    border: 2px dashed #ccc; 
+    border-radius: 5px; 
+    padding: 20px; 
+    text-align: center; 
+    cursor: pointer; 
+    margin: 20px 0; 
+    transition: background-color 0.3s; 
 }
 
 .upload-container:hover {
-    background-color: #f0f0f0; /* Change background on hover */
+    background-color: #f0f0f0; 
 }
 
 .upload-container p {
     font-size: 16px;
-    font-weight: bold; /* Bold text */
+    font-weight: bold; 
 }
 
 /* Styling for the receipts section */
@@ -64,32 +104,29 @@
 
 /* Additional styling for receipt list */
 ul {
-    list-style-type: none; /* Remove bullet points */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
-    width: 100%; /* Full width */
-    max-width: 400px; /* Limit the width of the receipt list */
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0;
+    width: 100%; 
+    max-width: 400px; 
 }
 
-/* MainPage.css */
-/* MainPage.css */
 .sign-out-button {
-    position: absolute; /* Position the button absolutely */
-    top: 20px; /* Distance from the top */
-    right: 20px; /* Distance from the right */
-    width: 120px; /* Set a fixed width */
-    background-color: #ff4d4d; /* Button background color */
-    color: white; /* Button text color */
-    border: none; /* Remove border */
-    padding: 10px; /* Padding for the button */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Cursor changes to pointer on hover */
-    font-size: 16px; /* Font size */
-    transition: background-color 0.3s ease; /* Transition for hover effect */
+    position: absolute; 
+    top: 20px; 
+    right: 20px; 
+    width: 120px; 
+    background-color: #ff4d4d; 
+    color: white; 
+    border: none; 
+    padding: 10px; 
+    border-radius: 5px;
+    cursor: pointer; 
+    font-size: 16px; 
+    transition: background-color 0.3s ease; 
 }
-
 
 .sign-out-button:hover {
-    background-color: #ff1a1a; /* Darker shade on hover */
+    background-color: #ff1a1a; 
 }
 
