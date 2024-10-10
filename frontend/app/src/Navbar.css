@@ -1,0 +1,38 @@
+/* src/Navbar.css */
+/* src/Navbar.css */
+.navbar {
+    background-color: #333;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    position: fixed;  /* Fix it at the top */
+    bottom: 0;           /* Align it to the top of the page */
+    width: 100%;      /* Make it span across the full width */
+    z-index: 1000;    /* Ensure it stays above other content */
+}
+
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links li {
+    margin: 0;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;  /* Increase padding for more space */
+    background-color: #007bff;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+
+.navbar-links a:hover {
+    background-color: #0056b3;
+}
