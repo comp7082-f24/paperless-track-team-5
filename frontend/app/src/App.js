@@ -4,6 +4,10 @@ import { auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth'; 
 import SignUp from './SignUp/SignUp';
 import SignIn from './SignIn/SignIn';
+import Navbar from './Navbar/Navbar'; 
+import Analytics from './Analytics';
+import Categories from './Categories';
+import UserProfile from './Userprofile';
 import ForgotPassword from './ForgotPassword';
 import Dashboard from './MainPage/MainPage'; 
 import './style.css'; 
@@ -34,12 +38,17 @@ const App = () => {
     return (
         <Router>
             <div className="app-container">
+                {/* Add Navbar here, so it's displayed on all pages */}
+                <Navbar />
                 <Routes>
                     <Route path="/" element={isSignUp ? <SignUp toggleForm={toggleForm} /> : <SignIn toggleForm={toggleForm} />} />
                     <Route path="/signin" element={<SignIn toggleForm={toggleForm} />} />
                     <Route path="/signup" element={<SignUp toggleForm={toggleForm} />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} /> 
                     <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/signin" />} />
+                    <Route path="/analytics" element={<Analytics />} />
+                    <Route path="/categories" element={<Categories />} />
+                    <Route path="/profile" element={<UserProfile />} />
                 </Routes>
             </div>
         </Router>
