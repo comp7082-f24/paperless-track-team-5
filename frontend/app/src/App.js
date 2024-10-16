@@ -11,6 +11,7 @@ import UserProfile from './Userprofile';
 import ForgotPassword from './ForgotPassword';
 import Dashboard from './MainPage/MainPage'; 
 import './style.css'; 
+import ManualUpload from './MainPage/ManualUpload';
 
 const App = () => {
     const [isSignUp, setIsSignUp] = useState(false); 
@@ -39,7 +40,7 @@ const App = () => {
         <Router>
             <div className="app-container">
                 {/* Add Navbar here, so it's displayed on all pages */}
-                <Navbar />
+                {!!user & <Navbar />}
                 <Routes>
                     <Route path="/" element={isSignUp ? <SignUp toggleForm={toggleForm} /> : <SignIn toggleForm={toggleForm} />} />
                     <Route path="/signin" element={<SignIn toggleForm={toggleForm} />} />
@@ -49,6 +50,7 @@ const App = () => {
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/categories" element={<Categories />} />
                     <Route path="/profile" element={<UserProfile />} />
+                    <Route path="/record" element={<ManualUpload />} />
                 </Routes>
             </div>
         </Router>
