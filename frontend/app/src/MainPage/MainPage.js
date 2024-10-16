@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const db = getFirestore();
 
-const Dashboard = ({ user, onSignOut }) => { 
+const Dashboard = ({ user }) => { 
     const [receipts, setReceipts] = useState([]);
     const [showCamera, setShowCamera] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -117,20 +117,15 @@ const Dashboard = ({ user, onSignOut }) => {
         <div>
             <div className="header">
                 <h1>Welcome, {loading ? 'Loading...' : username}!</h1> {/* Display username or loading */}
-                {/* Use the SignOut component */}
-                <SignOut onSignOut={onSignOut} /> 
             </div>
-            {/* <div>
-                <ManualUpload/>
-            </div> */}
             <button
                 onClick={() => navigate("/record")}
             >
                 Manual Upload
             </button>
-            <div className="dashboard-title">
+            {/* <div className="dashboard-title">
                 <h2>Dashboard</h2>
-            </div>
+            </div> */}
             <button onClick={() => setShowCamera(!showCamera)}>
                 {showCamera ? 'Switch to Upload' : 'Scan with Camera'}
             </button>

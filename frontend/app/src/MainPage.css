@@ -112,18 +112,18 @@ ul {
 }
 
 .sign-out-button {
-    position: absolute; 
-    top: 20px; 
-    right: 20px; 
-    width: 120px; 
+    /* position: absolute;  */
+    /* top: 20px;  */
+    /* right: 20px;  */
     background-color: #ff4d4d; 
+    /* width: 120px; 
     color: white; 
     border: none; 
     padding: 10px; 
     border-radius: 5px;
     cursor: pointer; 
     font-size: 16px; 
-    transition: background-color 0.3s ease; 
+    transition: background-color 0.3s ease;  */
 }
 
 .sign-out-button:hover {
