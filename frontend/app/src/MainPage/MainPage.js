@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import CameraCapture from './Camera';
 import Tesseract from 'tesseract.js';
-import { getFirestore, collection, addDoc, getDocs, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, doc, getDoc, deleteDoc, where, query } from 'firebase/firestore';
 import '../MainPage.css';
 import SignOut from '../SignOut';  // Import the new SignOut component
 import ManualUpload from './ManualUpload';
 import { useNavigate } from "react-router-dom";
+import ReceiptConfirm from './ReceiptConfirm';
 
 
 
@@ -17,6 +18,8 @@ const Dashboard = ({ user }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(true);
+    const [showPopup, setShowPopup] = useState(false);
+    const [receiptDetails, setReceiptDetails] = useState({ vendor: '', total: '', date: '', category: ''});
 
     // Fetch username and receipts from Firestore
     useEffect(() => {
@@ -32,7 +35,8 @@ const Dashboard = ({ user }) => {
 
         const fetchReceipts = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, 'receipts'));
+                const q = query(collection(db, 'receipts'), where('userId', '==', user.uid));
+                const querySnapshot = await getDocs(q);
                 const receiptData = [];
                 querySnapshot.forEach((doc) => {
                     receiptData.push({ ...doc.data(), id: doc.id });
@@ -51,77 +55,99 @@ const Dashboard = ({ user }) => {
         const file = event.target.files[0];
         setSelectedFile(file ? file.name : null);
         processReceipt(file);
-        sendReceiptToBackend(file);
     };
 
-    const sendReceiptToBackend = async (file) => {
+    const handleReceiptCapture = async (imageSrc) => {
+        try {
+            const base64Response = await fetch(imageSrc);
+            const blob = await base64Response.blob();
+            const file = new File([blob], 'captured-image.jpg', { type: 'image/jpeg' });
+            processReceipt(file);
+        } catch (error) {
+            console.error('Error capturing image: ', error);
+        }
+    };
+
+    const processReceipt = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
-      
+    
         try {
-          // Send the file to the backend
-          const response = await fetch('http://localhost:5000/api/process-receipt', {
-            method: 'POST',
-            body: formData,
-          });
-      
-          if (response.ok) {
-            const result = await response.json();
-            console.log('Backend Response:', result);
-            // save details here
-          } else {
-            console.error('Failed to process the receipt:', response.statusText);
-          }
-        } catch (error) {
-          console.error('Error uploading the receipt:', error);
-        }
-      };
-
-    const processReceipt = (file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            Tesseract.recognize(
-                reader.result,
-                'eng',
-                {
-                    logger: (m) => console.log(m),
-                }
-            ).then(({ data: { text } }) => {
-                storeReceiptData({ details: [{ itemName: text, itemPrice: 'N/A' }] });
+            // Send the file to the backend for processing using Veryfi
+            const response = await fetch('http://localhost:5000/api/process-receipt', {
+                method: 'POST',
+                body: formData,
             });
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const handleCapture = (imageSrc) => {
-        Tesseract.recognize(
-            imageSrc,
-            'eng',
-            {
-                logger: (m) => console.log(m),
+    
+            if (!response.ok) {
+                throw new Error('Failed to process the receipt');
             }
-        ).then(({ data: { text } }) => {
-            storeReceiptData({ details: [{ itemName: text, itemPrice: 'N/A' }] });
-        });
+    
+            // Extract the JSON response from the backend
+            const data = await response.json();
+            console.log('Backend Response:', data);
+    
+            // Set the receipt details received from the backend for user confirmation
+            setReceiptDetails({
+                userId: user.uid,
+                vendor: data.vendor || '',
+                total: data.total || '',
+                date: data.date || '',
+                category: data.category || '',
+            });
+    
+            // Open the pop-up for confirmation
+            setShowPopup(true);
+            
+        } catch (error) {
+            // Handle any errors that occur during the fetch or response processing
+            console.error('Error uploading the receipt:', error);
+        }
     };
 
-    const storeReceiptData = async (data) => {
+    const handleReceiptConfirm = async () => {
         try {
-            await addDoc(collection(db, 'receipts'), data);
-            fetchReceipts(); // Refresh receipts after storing new data
+            // Save the confirmed receipt details to Firestore
+            await addDoc(collection(db, 'receipts'), {
+                userId: user.uid,
+                vendor: receiptDetails.vendor,
+                total: receiptDetails.total,
+                date: receiptDetails.date,
+                category: receiptDetails.category,
+                timestamp: new Date(), // Add a timestamp for each receipt
+            });
+    
+            console.log('Receipt saved successfully');
+            setShowPopup(false); // Close the pop-up after saving
+            fetchReceipts();
         } catch (error) {
-            console.error('Error adding receipt: ', error);
+            console.error('Error saving receipt:', error);
         }
+    };
+
+    const handleReceiptChange = (e) => {
+        setReceiptDetails({ ...receiptDetails, [e.target.name]: e.target.value });
+    };
+
+    const handleReceiptCancel = () => {
+        setShowPopup(false); // Close the pop-up without saving
+        console.log('Receipt addition cancelled');
     };
 
     const fetchReceipts = async () => {
         try {
-            const querySnapshot = await getDocs(collection(db, 'receipts'));
-            const receiptData = [];
-            querySnapshot.forEach((doc) => {
-                receiptData.push({ ...doc.data(), id: doc.id });
-            });
-            setReceipts(receiptData);
+            if (user) {
+                // Query only receipts where userId matches the current user
+                const querySnapshot = await getDocs(
+                    collection(db, 'receipts'),
+                    where('userId', '==', user.uid) // Filter by userId
+                );
+                const receiptData = [];
+                querySnapshot.forEach((doc) => {
+                    receiptData.push({ ...doc.data(), id: doc.id });
+                });
+                setReceipts(receiptData);
+            }
         } catch (error) {
             console.error('Error fetching receipts: ', error);
         }
@@ -155,7 +181,7 @@ const Dashboard = ({ user }) => {
             </button>
 
             {showCamera ? (
-                <CameraCapture onCapture={handleCapture} />
+                <CameraCapture onCapture={handleReceiptCapture} />
             ) : (
                 <div className="upload-container" onClick={() => document.getElementById('file-input').click()}>
                     {selectedFile ? (
@@ -176,22 +202,26 @@ const Dashboard = ({ user }) => {
             <ul>
                 {receipts.map(receipt => (
                     <li key={receipt.id}>
-                        {Array.isArray(receipt.details) ? (
-                            receipt.details.map((detail, index) => (
-                                <div key={index}>
-                                    <span>{detail.itemName}: </span>
-                                    <span>{detail.itemPrice}</span>
-                                </div>
-                            ))
-                        ) : (
-                            <span>{receipt.details}</span> 
-                        )}
+                        <div>
+                            <span>Vendor: {receipt.vendor}</span><br />
+                            <span>Total: {receipt.total}</span><br />
+                            <span>Date: {receipt.date}</span><br />
+                            <span>Category: {receipt.category}</span>
+                        </div>
                         <button className="delete-button" onClick={() => deleteReceipt(receipt.id)}>
                             Delete
                         </button>
                     </li>
                 ))}
             </ul>
+            {showPopup && (
+                <ReceiptConfirm 
+                  receiptDetails={receiptDetails} 
+                  onConfirm={handleReceiptConfirm}
+                  onCancel={handleReceiptCancel}
+                  onChange={handleReceiptChange} 
+                />
+            )}
         </div>
     );
 };
