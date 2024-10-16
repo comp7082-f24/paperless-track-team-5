@@ -51,7 +51,31 @@ const Dashboard = ({ user }) => {
         const file = event.target.files[0];
         setSelectedFile(file ? file.name : null);
         processReceipt(file);
+        sendReceiptToBackend(file);
     };
+
+    const sendReceiptToBackend = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+      
+        try {
+          // Send the file to the backend
+          const response = await fetch('http://localhost:5000/api/process-receipt', {
+            method: 'POST',
+            body: formData,
+          });
+      
+          if (response.ok) {
+            const result = await response.json();
+            console.log('Backend Response:', result);
+            // save details here
+          } else {
+            console.error('Failed to process the receipt:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error uploading the receipt:', error);
+        }
+      };
 
     const processReceipt = (file) => {
         const reader = new FileReader();
