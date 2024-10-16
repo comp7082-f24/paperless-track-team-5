@@ -40,7 +40,7 @@ const App = () => {
         <Router>
             <div className="app-container">
                 {/* Add Navbar here, so it's displayed on all pages */}
-                {!!user & <Navbar />}
+                {user && <Navbar />}
                 <Routes>
                     <Route path="/" element={isSignUp ? <SignUp toggleForm={toggleForm} /> : <SignIn toggleForm={toggleForm} />} />
                     <Route path="/signin" element={<SignIn toggleForm={toggleForm} />} />
