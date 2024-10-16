@@ -35,8 +35,8 @@ const Dashboard = ({ user }) => {
 
         const fetchReceipts = async () => {
             try {
-                const q = query(collection(db, 'receipts'), where('userId', '==', user.uid));
-                const querySnapshot = await getDocs(q);
+                const receiptsCollectionRef = collection(db, 'users', user.uid, 'receipts');
+                const querySnapshot = await getDocs(receiptsCollectionRef);
                 const receiptData = [];
                 querySnapshot.forEach((doc) => {
                     receiptData.push({ ...doc.data(), id: doc.id });
@@ -89,11 +89,10 @@ const Dashboard = ({ user }) => {
     
             // Set the receipt details received from the backend for user confirmation
             setReceiptDetails({
-                userId: user.uid,
                 vendor: data.vendor || '',
                 total: data.total || '',
                 date: data.date || '',
-                category: data.category || '',
+                category: data.category || ''
             });
     
             // Open the pop-up for confirmation
@@ -107,14 +106,15 @@ const Dashboard = ({ user }) => {
 
     const handleReceiptConfirm = async () => {
         try {
+            const userRef = doc(db, 'users', user.uid);
+            const receiptsCollectionRef = collection(userRef, 'receipts'); // Subcollection under the user
             // Save the confirmed receipt details to Firestore
-            await addDoc(collection(db, 'receipts'), {
-                userId: user.uid,
+            await addDoc(receiptsCollectionRef, {
                 vendor: receiptDetails.vendor,
                 total: receiptDetails.total,
                 date: receiptDetails.date,
                 category: receiptDetails.category,
-                timestamp: new Date(), // Add a timestamp for each receipt
+                timestamp: new Date() // Add a timestamp for each receipt
             });
     
             console.log('Receipt saved successfully');
@@ -137,11 +137,8 @@ const Dashboard = ({ user }) => {
     const fetchReceipts = async () => {
         try {
             if (user) {
-                // Query only receipts where userId matches the current user
-                const querySnapshot = await getDocs(
-                    collection(db, 'receipts'),
-                    where('userId', '==', user.uid) // Filter by userId
-                );
+                const receiptsCollectionRef = collection(db, 'users', user.uid, 'receipts');
+                const querySnapshot = await getDocs(receiptsCollectionRef);
                 const receiptData = [];
                 querySnapshot.forEach((doc) => {
                     receiptData.push({ ...doc.data(), id: doc.id });
@@ -155,12 +152,16 @@ const Dashboard = ({ user }) => {
 
     const deleteReceipt = async (id) => {
         try {
-            await deleteDoc(doc(db, 'receipts', id)); 
-            fetchReceipts(); // Refresh receipts after deletion
+            // Reference the specific receipt in the user's subcollection
+            await deleteDoc(doc(db, 'users', user.uid, 'receipts', id));
+    
+            // Refresh the receipts after deletion
+            fetchReceipts();
         } catch (error) {
-            console.error('Error deleting receipt: ', error);
+            console.error('Error deleting receipt:', error);
         }
     };
+
     const navigate = useNavigate()
 
     return (
