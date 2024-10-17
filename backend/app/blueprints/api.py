@@ -34,10 +34,8 @@ def process_receipt():
     vf_data = vf_response.json()
     receipt_data = {
         'vendor': vf_data['vendor']['name'],
-        'category': vf_data['vendor']['category'],
         'total': vf_data['total'],
-        'subtotal': vf_data['subtotal'],
-        'tax': vf_data['tax'],
+        'category': vf_data['vendor']['category'],
         'date': vf_data['date']
     }
 

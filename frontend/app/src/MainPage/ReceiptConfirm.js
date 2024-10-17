@@ -12,11 +12,11 @@ const ReceiptConfirmation = ({ receiptDetails, onConfirm, onCancel, onChange }) 
           <label>Total</label>
           <input type="text" name="total" value={receiptDetails.total} onChange={onChange} />
 
-          <label>Date</label>
-          <input type="text" name="date" value={receiptDetails.date} onChange={onChange} />
-
           <label>Category</label>
           <input type="text" name="category" value={receiptDetails.category} onChange={onChange} />
+
+          <label>Date</label>
+          <input type="text" name="date" value={receiptDetails.date} onChange={onChange} />
           
           <button type="button" onClick={onConfirm}>Confirm</button>
           <button type="button" onClick={onCancel}>Cancel</button>

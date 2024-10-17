@@ -4,7 +4,7 @@ import Tesseract from 'tesseract.js';
 import { getFirestore, collection, addDoc, getDocs, doc, getDoc, deleteDoc, where, query } from 'firebase/firestore';
 import '../MainPage.css';
 import SignOut from '../SignOut';  // Import the new SignOut component
-import ManualUpload from './ManualUpload';
+import ManualUpload from './ManualEntry';
 import { useNavigate } from "react-router-dom";
 import ReceiptConfirm from './ReceiptConfirm';
 
@@ -19,7 +19,7 @@ const Dashboard = ({ user }) => {
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(true);
     const [showPopup, setShowPopup] = useState(false);
-    const [receiptDetails, setReceiptDetails] = useState({ vendor: '', total: '', date: '', category: ''});
+    const [receiptDetails, setReceiptDetails] = useState({ vendor: '', total: '', category: '', date: ''});
 
     // Fetch username and receipts from Firestore
     useEffect(() => {
@@ -91,8 +91,8 @@ const Dashboard = ({ user }) => {
             setReceiptDetails({
                 vendor: data.vendor || '',
                 total: data.total || '',
-                date: data.date || '',
-                category: data.category || ''
+                category: data.category || '',
+                date: data.date || ''
             });
     
             // Open the pop-up for confirmation
@@ -112,8 +112,8 @@ const Dashboard = ({ user }) => {
             await addDoc(receiptsCollectionRef, {
                 vendor: receiptDetails.vendor,
                 total: receiptDetails.total,
-                date: receiptDetails.date,
                 category: receiptDetails.category,
+                date: receiptDetails.date,
                 timestamp: new Date() // Add a timestamp for each receipt
             });
     
@@ -172,7 +172,7 @@ const Dashboard = ({ user }) => {
             <button
                 onClick={() => navigate("/record")}
             >
-                Manual Upload
+                Manual Entry
             </button>
             {/* <div className="dashboard-title">
                 <h2>Dashboard</h2>
@@ -206,8 +206,8 @@ const Dashboard = ({ user }) => {
                         <div>
                             <span>Vendor: {receipt.vendor}</span><br />
                             <span>Total: {receipt.total}</span><br />
+                            <span>Category: {receipt.category}</span><br />
                             <span>Date: {receipt.date}</span><br />
-                            <span>Category: {receipt.category}</span>
                         </div>
                         <button className="delete-button" onClick={() => deleteReceipt(receipt.id)}>
                             Delete

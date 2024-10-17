@@ -11,7 +11,7 @@ import UserProfile from './Userprofile';
 import ForgotPassword from './ForgotPassword';
 import Dashboard from './MainPage/MainPage'; 
 import './style.css'; 
-import ManualUpload from './MainPage/ManualUpload';
+import ManualUpload from './MainPage/ManualEntry';
 
 const App = () => {
     const [isSignUp, setIsSignUp] = useState(false); 
@@ -48,9 +48,9 @@ const App = () => {
                     <Route path="/forgot-password" element={<ForgotPassword />} /> 
                     <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/signin" />} />
                     <Route path="/analytics" element={<Analytics />} />
-                    <Route path="/categories" element={<Categories />} />
+                    <Route path="/categories" element={<UserProfile />} />
                     <Route path="/profile" element={<UserProfile />} />
-                    <Route path="/record" element={<ManualUpload />} />
+                    <Route path="/record" element={user ? <ManualUpload user={user} /> : <Navigate to="/signin" />} />
                 </Routes>
             </div>
         </Router>
