@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, MenuItem, FormControl, InputLabel, Select, OutlinedInput } from '@mui/material';
+import { TextField, Button, MenuItem, FormControl, InputLabel, Select, OutlinedInput, Typography } from '@mui/material';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,8 +63,7 @@ const ManualEntry = ({ user }) => {
 
     return (
         <div>
-            <h2>Enter Receipt Details</h2>
-
+            <Typography variant="h4" gutterBottom>Confirm Receipt Details</Typography>
             <FormControl fullWidth margin="normal">
                 <TextField
                     label="Vendor"
