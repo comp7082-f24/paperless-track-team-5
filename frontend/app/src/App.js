@@ -48,7 +48,7 @@ const App = () => {
                     <Route path="/forgot-password" element={<ForgotPassword />} /> 
                     <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/signin" />} />
                     <Route path="/analytics" element={<Analytics />} />
-                    <Route path="/categories" element={<Categories />} />
+                    <Route path="/categories" element={user ? <Categories user={user} /> : <Navigate to="/signin" />} />
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/record" element={user ? <ManualUpload user={user} /> : <Navigate to="/signin" />} />
                 </Routes>
