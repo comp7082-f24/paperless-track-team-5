@@ -130,3 +130,48 @@ ul {
     background-color: #ff1a1a; 
 }
 
+.receipt-adder {
+    position: fixed;
+    bottom: 20px; /* Adjust this if needed */
+    right: 20px;
+    z-index: 100;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column-reverse; /* Ensure buttons expand upwards */
+    align-items: center;
+    gap: 15px;
+    position: absolute;
+    bottom: 70px; /* Expand above the + icon */
+}
+
+.main-button {
+    z-index: 101; /* Ensure it's above the expanded buttons */
+}
+
+.camera-preview {
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    width: 300px; /* You can adjust the width */
+    height: 200px; /* Adjust height as needed */
+    z-index: 100; /* Ensures it stays above the page content but below the floating action buttons */
+    border: 2px solid #ccc; /* Optional styling */
+    background-color: black; /* For contrast */
+}
+
+.camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align the button beneath the camera */
+    margin-bottom: 10px; /* Add spacing below the camera if needed */
+}
+
+.capture-button {
+    margin-top: 10px; /* Space between camera preview and button */
+    background-color: #4CAF50; /* Customize button color */
+    color: white;
+    border: none;
+    padding: 10
+}

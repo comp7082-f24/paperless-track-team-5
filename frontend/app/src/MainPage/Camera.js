@@ -11,7 +11,7 @@ const CameraCapture = ({ onCapture }) => {
     }, [webcamRef, onCapture]);
 
     return (
-        <div>
+        <div className="camera-container">
             <Webcam
                 audio={false}
                 ref={webcamRef}
@@ -19,7 +19,7 @@ const CameraCapture = ({ onCapture }) => {
                 width={320}
                 height={240}
             />
-            <button onClick={capture}>Capture Photo</button>
+            <button className="capture-button" onClick={capture}>Capture Photo</button>
         </div>
     );
 };
