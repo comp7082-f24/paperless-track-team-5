@@ -1,10 +1,11 @@
 import React from 'react';
 import { getFirestore, collection, addDoc, doc } from 'firebase/firestore';
+import { TextField, Button, Box, Typography } from '@mui/material';
 
 const db = getFirestore();
 
 const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails, setShowPopup }) => {
-  
+
   const handleConfirm = async () => {
     try {
       const userRef = doc(db, 'users', user.uid);
@@ -23,7 +24,7 @@ const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails
       fetchReceipts();
 
     } catch (error) {
-        console.error('Error saving receipt:', error);
+      console.error('Error saving receipt:', error);
     }
   };
 
@@ -39,22 +40,68 @@ const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails
   return (
     <div className="popup-overlay">
       <div className="popup-content">
-        <h2>Confirm Receipt Details</h2>
+        <Typography variant="h4" gutterBottom>Confirm Receipt Details</Typography>
         <form>
-          <label>Vendor</label>
-          <input type="text" name="vendor" value={receiptDetails.vendor} onChange={handleChange} />
+          <Box display="flex" flexDirection="column" gap={2}>
+            <TextField
+              label="Vendor"
+              variant="outlined"
+              name="vendor"
+              value={receiptDetails.vendor}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
 
-          <label>Total</label>
-          <input type="text" name="total" value={receiptDetails.total} onChange={handleChange} />
+            <TextField
+              label="Total"
+              variant="outlined"
+              type="number"
+              name="total"
+              value={receiptDetails.total}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
 
-          <label>Category</label>
-          <input type="text" name="category" value={receiptDetails.category} onChange={handleChange} />
+            <TextField
+              label="Category"
+              variant="outlined"
+              name="category"
+              value={receiptDetails.category}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
 
-          <label>Date</label>
-          <input type="text" name="date" value={receiptDetails.date} onChange={handleChange} />
-          
-          <button type="button" onClick={handleConfirm}>Confirm</button>
-          <button type="button" onClick={handleCancel}>Cancel</button>
+            <TextField
+              label="Date"
+              variant="outlined"
+              name="date"
+              value={receiptDetails.date}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              required
+            />
+
+            <Box display="flex" justifyContent="space-between" mt={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleConfirm}
+              >
+                Confirm
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleCancel}
+              >
+                Cancel
+              </Button>
+            </Box>
+          </Box>
         </form>
       </div>
     </div>

@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import { TextField, Button, MenuItem, FormControl, InputLabel, Select, OutlinedInput } from '@mui/material';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
@@ -69,50 +65,75 @@ const ManualEntry = ({ user }) => {
         <div>
             <h2>Enter Receipt Details</h2>
 
-            <FormControl fullWidth>
-                <InputLabel id="category-label">Category</InputLabel>
-                <Select
-                    labelId="category-label"
-                    id="category-select"
-                    value={category} // Single string value for category
-                    onChange={changeCategory}
-                    input={<OutlinedInput label="Category" />}
-                >
-                    {categories.map((cat) => (
-                        <MenuItem key={cat} value={cat}>
-                            {cat}
-                        </MenuItem>
-                    ))}
-                </Select>
-
-                <input
-                    type="text"
-                    placeholder="Vendor"
+            <FormControl fullWidth margin="normal">
+                <TextField
+                    label="Vendor"
                     value={vendor}
                     onChange={(e) => setVendor(e.target.value)}
                     required
+                    fullWidth
+                    margin="normal"
                 />
-                <input
-                    type="text"
-                    placeholder="Total"
+
+                <TextField
+                    label="Total"
+                    type="number"
                     value={total}
                     onChange={(e) => setTotal(e.target.value)}
                     required
-                />
-                <input
-                    type="date"
-                    placeholder="Date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    required
+                    fullWidth
+                    margin="normal"
                 />
 
-                <button type="button" onClick={saveReceipt}>
+                <FormControl fullWidth margin="normal">
+                    <InputLabel id="category-label">Category</InputLabel>
+                    <Select
+                        labelId="category-label"
+                        id="category-select"
+                        value={category} // Single string value for category
+                        onChange={changeCategory}
+                        input={<OutlinedInput label="Category" />}
+                        required
+                    >
+                        {categories.map((cat) => (
+                            <MenuItem key={cat} value={cat}>
+                                {cat}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <TextField
+                    label="Date"
+                    variant="outlined"
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    InputLabelProps={{ shrink: true }}
+                    required
+                    fullWidth
+                    margin="normal"
+                />
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={saveReceipt}
+                    fullWidth
+                    style={{ marginTop: '16px' }}
+                >
                     Save
-                </button>
-                <button type="button" onClick={handleCancel}>
+                </Button>
+
+                <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={handleCancel}
+                    fullWidth
+                    style={{ marginTop: '8px' }}
+                >
                     Cancel
-                </button>
+                </Button>
             </FormControl>
         </div>
     );

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, addDoc, getDocs, doc, getDoc, deleteDoc } from 'firebase/firestore';
 import '../MainPage.css';
-import SignOut from '../SignOut';  // Import the new SignOut component
-import ManualUpload from './ManualEntry';
 import { useNavigate } from "react-router-dom";
-import ReceiptConfirm from './ReceiptConfirm';
 import ReceiptAdder from './ReceiptAdder';
+import ReceiptCard from './ReceiptCard';
+import { Container, Box } from '@mui/material';
 
 
 const db = getFirestore();
@@ -61,20 +60,6 @@ const Dashboard = ({ user }) => {
         }
     };
 
-    const deleteReceipt = async (id) => {
-        try {
-            // Reference the specific receipt in the user's subcollection
-            await deleteDoc(doc(db, 'users', user.uid, 'receipts', id));
-    
-            // Refresh the receipts after deletion
-            fetchReceipts();
-        } catch (error) {
-            console.error('Error deleting receipt:', error);
-        }
-    };
-
-    const navigate = useNavigate()
-
     return (
         <div>
             <div className="header">
@@ -87,22 +72,20 @@ const Dashboard = ({ user }) => {
             />
 
             <h2>Your Receipts:</h2>
-            <ul>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', minWidth: '500px', maxWidth: '500px', }}>
                 {receipts.map(receipt => (
-                    <li key={receipt.id}>
-                        <div>
-                            <span>Vendor: {receipt.vendor}</span><br />
-                            <span>Total: {receipt.total}</span><br />
-                            <span>Category: {receipt.category}</span><br />
-                            <span>Date: {receipt.date}</span><br />
-                        </div>
-                        <button className="delete-button" onClick={() => deleteReceipt(receipt.id)}>
-                            Delete
-                        </button>
-                    </li>
+                    <ReceiptCard
+                    key={receipt.id}
+                    vendor={receipt.vendor}
+                    total={receipt.total}
+                    date={receipt.date}
+                    category={receipt.category}
+                    user={user}
+                    id={receipt.id}
+                    fetchReceipts={fetchReceipts}
+                    />
                 ))}
-            </ul>
-
+            </div>
         </div>
     );
 };
