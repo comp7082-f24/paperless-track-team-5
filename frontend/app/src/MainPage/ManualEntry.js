@@ -63,7 +63,7 @@ const ManualEntry = ({ user }) => {
 
     return (
         <div>
-            <Typography variant="h4" gutterBottom>Confirm Receipt Details</Typography>
+            <Typography variant="h4" gutterBottom>Enter Receipt Details</Typography>
             <FormControl fullWidth margin="normal">
                 <TextField
                     label="Vendor"
