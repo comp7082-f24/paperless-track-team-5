@@ -1,8 +1,9 @@
 // src/SignIn.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
+import { auth, firestore } from '../firebaseConfig'; // Ensure firestore is imported
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { doc, updateDoc } from 'firebase/firestore'; // Import updateDoc for Firestore
 
 const SignIn = ({ toggleForm }) => {
     const [email, setEmail] = useState('');
@@ -17,7 +18,14 @@ const SignIn = ({ toggleForm }) => {
         setError('');
 
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Update last login date in Firestore
+            await updateDoc(doc(firestore, 'users', user.uid), {
+                lastLogin: new Date(), // Store the last login date
+            });
+
             alert('Sign-in successful!');
             navigate('/dashboard'); // Redirect to dashboard on success
         } catch (err) {
@@ -32,6 +40,12 @@ const SignIn = ({ toggleForm }) => {
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
+
+            // Update last login date in Firestore
+            await updateDoc(doc(firestore, 'users', user.uid), {
+                lastLogin: new Date(), // Store the last login date
+            });
+
             console.log('User signed in: ', user);
             navigate('/dashboard'); // Redirect to dashboard on success
         } catch (error) {
