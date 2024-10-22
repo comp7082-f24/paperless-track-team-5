@@ -31,6 +31,8 @@ const SignUp = ({ toggleForm }) => {
                 username, 
                 email,
                 incomeType,
+                registrationDate: new Date(), // Automatically set registration date
+                lastLogin: new Date(), // Set last login date on signup
             });
 
             alert('Sign-up successful! Please sign in.');
