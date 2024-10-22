@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth"; // Import persistence functions
+import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
+// Firebase configuration object for Receipt Tracker project
 const firebaseConfig = {
     apiKey: "AIzaSyC91pHHMJfeS3c-9-ZKJSnDsBWJ-MaaxjI",
     authDomain: "receipt-tracker-72f3d.firebaseapp.com",
@@ -11,14 +13,23 @@ const firebaseConfig = {
     appId: "1:824273519528:web:8b567edd9b4f718d77939d"
 };
 
-// Initialize Firebase
+// Initialize Firebase App
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Authentication
 const auth = getAuth(app);
 
-// Set persistence to local
+// Set authentication persistence to 'local' (i.e., persists across sessions)
 setPersistence(auth, browserLocalPersistence)
     .catch((error) => {
-        console.error("Error setting persistence: ", error);
+        console.error("Error setting persistence: ", error); // Log any error in persistence setting
     });
 
-export { auth };
+// Initialize Firestore database
+const firestore = getFirestore(app);
+
+// Initialize Firebase Storage
+const storage = getStorage(app);
+
+// Export Firebase services for use in other parts of the app
+export { auth, firestore, storage, signInWithEmailAndPassword };
