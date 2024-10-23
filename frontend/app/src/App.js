@@ -12,6 +12,8 @@ import ForgotPassword from './ForgotPassword';
 import Dashboard from './MainPage/MainPage'; 
 import './style.css'; 
 import ManualUpload from './MainPage/ManualEntry';
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { Theme } from './themes/Theme'
 
 const App = () => {
     const [isSignUp, setIsSignUp] = useState(false); 
@@ -38,6 +40,8 @@ const App = () => {
 
     return (
         <Router>
+            <ThemeProvider theme={Theme}>
+            <CssBaseline enableColorScheme />
             <div className="app-container">
                 {/* Add Navbar here, so it's displayed on all pages */}
                 {user && <Navbar />}
@@ -53,6 +57,7 @@ const App = () => {
                     <Route path="/record" element={user ? <ManualUpload user={user} /> : <Navigate to="/signin" />} />
                 </Routes>
             </div>
+            </ThemeProvider>
         </Router>
     );
 };

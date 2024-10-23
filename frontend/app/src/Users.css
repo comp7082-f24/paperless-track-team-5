@@ -20,7 +20,7 @@
     text-align: center;
     margin-bottom: 10px;
     font-size: 24px;
-    color: #333;
+    /* color: #333; */
 }
 
 .profile-header img {
@@ -77,47 +77,47 @@
     transition: background-color 0.3s, transform 0.2s;
 }
 
-.change-password-button {
+/* .change-password-button {
     width: 140px;
-    background-color: #4caf50;
-    color: white;
-    font-size: 14px;
+    /* background-color: #4caf50;
+    color: white; */
+    /* font-size: 14px;
     margin-top: -45px;
     margin-left: 700px;
-}
+} */ */
 
 .change-password-button:hover {
-    background-color: #45a049;
+    /* background-color: #45a049; */
     transform: scale(1.05);
 }
 
 .logout-button {
     width: 200px;
-    background-color: #f44336;
-    color: white;
+    /* background-color: #f44336; */
+    /* color: white; */
     font-size: 14px;
     margin-top: 10px;
 }
 
 .logout-button:hover {
-    background-color: #e53935;
+    /* background-color: #e53935; */
     transform: scale(1.05);
 }
 
 .error-message {
-    color: #f44336;
+    /* color: #f44336; */
     margin-top: 5px;
 }
 
 .edit-icon {
     cursor: pointer;
     margin-left: 5px;
-    color: #007bff;
+    /* color: #007bff; */
     transition: color 0.3s;
 }
 
 .edit-icon:hover {
-    color: #0056b3;
+    /* color: #0056b3; */
 }
 
 .options-dropdown {
@@ -136,15 +136,14 @@
     padding: 10px;
     width: 100%;
     border: none;
-    background: #007bff;
-    color: white;
+    /* background: #007bff;
+    color: white; */
     cursor: pointer;
-    border-bottom: 1px solid #ccc;
-    transition: background 0.3s;
+    /* border-bottom: 1px solid #ccc; */
 }
 
 .options-dropdown button:hover {
-    background: #0056b3;
+    /* background: #0056b3; */
 }
 
 @media (max-width: 768px) {
