@@ -12,8 +12,7 @@ import ForgotPassword from './ForgotPassword';
 import Dashboard from './MainPage/MainPage'; 
 import './style.css'; 
 import ManualUpload from './MainPage/ManualEntry';
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { Theme } from './themes/Theme'
+import LandingPage from './LandingPage';  // Import the Header (landing page)
 
 const App = () => {
     const [isSignUp, setIsSignUp] = useState(false); 
@@ -24,40 +23,61 @@ const App = () => {
         setIsSignUp(!isSignUp); 
     };
 
+    // Monitor user authentication state
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            console.log('User state changed:', currentUser); 
             setLoading(false);
         });
 
         return () => unsubscribe(); 
     }, []);
 
+    // Loading state while checking authentication
     if (loading) {
         return <div>Loading...</div>; 
     }
 
     return (
         <Router>
-            <ThemeProvider theme={Theme}>
-            <CssBaseline enableColorScheme />
             <div className="app-container">
-                {/* Add Navbar here, so it's displayed on all pages */}
-                {user && <Navbar />}
+                {/* Render Navbar only if user is authenticated */}
+                <Navbar isAuthenticated={!!user} />
                 <Routes>
-                    <Route path="/" element={isSignUp ? <SignUp toggleForm={toggleForm} /> : <SignIn toggleForm={toggleForm} />} />
+                    {/* Default route to LandingPage (Landing Page) when user is not authenticated */}
+                    <Route 
+                        path="/" 
+                        element={user ? <Navigate to="/dashboard" /> : <LandingPage />} 
+                    />
+                    
+                    {/* Sign Up and Sign In routes */}
                     <Route path="/signin" element={<SignIn toggleForm={toggleForm} />} />
                     <Route path="/signup" element={<SignUp toggleForm={toggleForm} />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} /> 
-                    <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/signin" />} />
-                    <Route path="/analytics" element={<Analytics />} />
-                    <Route path="/categories" element={user ? <Categories user={user} /> : <Navigate to="/signin" />} />
-                    <Route path="/profile" element={<UserProfile />} />
-                    <Route path="/record" element={user ? <ManualUpload user={user} /> : <Navigate to="/signin" />} />
+
+                    {/* Protected routes that require authentication */}
+                    <Route 
+                        path="/dashboard" 
+                        element={user ? <Dashboard user={user} /> : <Navigate to="/signin" />} 
+                    />
+                    <Route 
+                        path="/analytics" 
+                        element={user ? <Analytics /> : <Navigate to="/signin" />} 
+                    />
+                    <Route 
+                        path="/categories" 
+                        element={user ? <Categories user={user} /> : <Navigate to="/signin" />} 
+                    />
+                    <Route 
+                        path="/profile" 
+                        element={user ? <UserProfile /> : <Navigate to="/signin" />} 
+                    />
+                    <Route 
+                        path="/record" 
+                        element={user ? <ManualUpload user={user} /> : <Navigate to="/signin" />} 
+                    />
                 </Routes>
             </div>
-            </ThemeProvider>
         </Router>
     );
 };
