@@ -66,7 +66,7 @@ const SignIn = () => {
 
         <Box component="form" onSubmit={handleSignIn} className="signin-form">
           <TextField
-            label="Work Email"
+            label="Email"
             variant="outlined"
             type="email"
             value={email}
