@@ -1,36 +1,141 @@
-/* src/Navbar.css */
-/* src/Navbar.css */
-.navbar {
-    /* background-color: #333; */
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    position: fixed;  /* Fix it at the top */
-    bottom: 0;           /* Align it to the top of the page */
-    width: 100%;      /* Make it span across the full width */
-    z-index: 1000;    /* Ensure it stays above other content */
-}
-
-
-.navbar-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-.navbar-links li {
+*{
     margin: 0;
+    padding: 0;
+}
+  
+  .signin-container {
+    margin-top: -60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: linear-gradient(to top, #5f72bd 50%, #9b23ea 100%);
+  }
+  
+  .signin-card {
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1); /* Adding transparency */
+    max-width: 1000px;
+    height: 450px
+  }
+  
+  .signin-title {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .signin-input .MuiInputLabel-root {
+    color: white;
+  }
+  
+  .signin-input .MuiOutlinedInput-root {
+    color: white;
+  }
+  
+  .signin-link a {
+    color: white;
+  }
+  
+  .signin-btn {
+    box-shadow:inset 0px 1px 0px 0px #e184f3;
+	background:linear-gradient(to bottom, #c123de 5%, #a20dbd 100%);
+	background-color:#c123de;
+	border-radius:6px;
+	border:1px solid #a511c0;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 20px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #9b14b3;
+  }
+  
+  .signin-btn:hover {
+    background:linear-gradient(to bottom, #a20dbd 5%, #c123de 100%);
+	background-color:#a20dbd;
+  }
+
+  
+
+
+.signup-container {
+    margin-top: -60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: linear-gradient(to top, #5f72bd 40%, #9b23ea 100%);
 }
 
-.navbar-links a {
-    /* color: white; */
+.signup-card {
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1); /* Adding transparency */
+    max-width: 800px;
+    height: 500px; /* Increased height to accommodate more fields */
+}
+
+.signup-title {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.signup-input .MuiInputLabel-root {
+    color: white;
+}
+
+.signup-input .MuiOutlinedInput-root {
+    color: white;
+}
+
+/* Authen.css */
+.MuiMenuItem-root {
+    background-color: #6A0AD6; /* Dropdown background color */
+    color: white; /* Dropdown text color */
+}
+
+.MuiMenuItem-root:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* Lighten on hover */
+    color: black; /* Ensure text is readable */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+
+
+.signup-link a {
+    color: white;
+}
+
+.signup-btn {
+    box-shadow: inset 0px 1px 0px 0px #e184f3;
+    background: linear-gradient(to bottom, #c123de 5%, #a20dbd 100%);
+    background-color: #c123de;
+    border-radius: 6px;
+    border: 1px solid #a511c0;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px 20px;
     text-decoration: none;
-    padding: 10px 20px;  /* Increase padding for more space */
-    border-radius: 4px;
-    transition: background-color 0.3s;
-    white-space: nowrap; /* Prevent text from wrapping */
+    text-shadow: 0px 1px 0px #9b14b3;
 }
 
-
-.navbar-links a:hover {
+.signup-btn:hover {
+    background: linear-gradient(to bottom, #a20dbd 5%, #c123de 100%);
+    background-color: #a20dbd;
 }
