@@ -208,15 +208,17 @@ const Navbar = ({ isAuthenticated }) => {
             alignItems="center"
             width="100%"
           >
-            <Typography
-              variant="h6"
-              sx={{
-                color: "white",
-                fontWeight: "bold",
-              }}
-            >
-              PaperlessTRACK
-            </Typography>
+              <Typography
+                variant="h5"
+                sx={{
+                  color: "white",
+                  fontWeight: "700",
+                  letterSpacing: "1.5px",
+                  fontFamily: "'Roboto Condensed', sans-serif",
+                }}
+              >
+                PaperlessTRACK
+              </Typography>
             <Nav />
           </Stack>
         </Toolbar>
