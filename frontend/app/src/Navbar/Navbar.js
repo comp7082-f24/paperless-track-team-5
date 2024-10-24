@@ -215,7 +215,7 @@ const Navbar = ({ isAuthenticated }) => {
                 fontWeight: "bold",
               }}
             >
-              PaperlessTrack
+              PaperlessTRACK
             </Typography>
             <Nav />
           </Stack>
