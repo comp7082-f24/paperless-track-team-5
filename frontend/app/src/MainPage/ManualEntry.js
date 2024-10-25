@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, MenuItem, FormControl, InputLabel, Select, OutlinedInput, Typography } from '@mui/material';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 const db = getFirestore(); // Initialize Firestore
@@ -8,22 +8,26 @@ const db = getFirestore(); // Initialize Firestore
 const ManualEntry = ({ user }) => {
     const [vendor, setVendor] = useState('');
     const [total, setTotal] = useState('');
-    const [category, setCategory] = useState(''); // Updated to a string for single selection
-    const [date, setDate] = useState(''); // Add state for date
+    const [category, setCategory] = useState('');
+    const [date, setDate] = useState('');
+    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
-    const categories = [
-        'Groceries',
-        'Eating out',
-        // Add more categories as needed
-    ];
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const categoriesCollectionRef = collection(db, 'users', user.uid, 'categories');
+            const querySnapshot = await getDocs(categoriesCollectionRef);
+            const fetchedCategories = querySnapshot.docs.map(doc => doc.data().name);
+            setCategories(fetchedCategories);
+        };
 
-    // Handle category selection
+        fetchCategories();
+    }, [user.uid]);
+
     const changeCategory = (event) => {
-        setCategory(event.target.value); // Set category as a string
+        setCategory(event.target.value);
     };
 
-    // Function to save the manually entered receipt data to Firestore
     const saveReceipt = async () => {
         if (!vendor || !total || !category || !date) {
             alert('Please fill out all fields');
@@ -31,24 +35,20 @@ const ManualEntry = ({ user }) => {
         }
 
         try {
-            // Reference the user's subcollection for receipts
             const receiptsCollectionRef = collection(db, 'users', user.uid, 'receipts');
-
-            // Save the receipt data
             await addDoc(receiptsCollectionRef, {
                 vendor,
                 total,
-                category, // Category is now a single string
-                date,     // Add date field to Firestore
-                timestamp: new Date(), // You can add more attributes as needed
+                category,
+                date,
+                timestamp: new Date(),
             });
 
             alert('Receipt saved successfully');
-            // Reset the form fields after saving
             setVendor('');
             setTotal('');
             setCategory('');
-            setDate(''); // Reset date field
+            setDate('');
 
             navigate("/dashboard");
         } catch (error) {
@@ -58,7 +58,7 @@ const ManualEntry = ({ user }) => {
     };
 
     const handleCancel = () => {
-        navigate("/dashboard"); // Navigate back to dashboard when cancel is clicked
+        navigate("/dashboard");
     };
 
     return (
@@ -89,7 +89,7 @@ const ManualEntry = ({ user }) => {
                     <Select
                         labelId="category-label"
                         id="category-select"
-                        value={category} // Single string value for category
+                        value={category}
                         onChange={changeCategory}
                         input={<OutlinedInput label="Category" />}
                         required
