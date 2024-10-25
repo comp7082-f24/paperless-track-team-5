@@ -115,7 +115,7 @@ const ManualEntry = ({ user }) => {
                 />
 
                 <Button
-                    variant="contained"
+                    variant="outlined"
                     color="primary"
                     onClick={saveReceipt}
                     fullWidth
