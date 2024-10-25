@@ -53,12 +53,21 @@ const CategoryCard = ({ name, monthlyBudget, color, user, id, fetchCategories })
 
   const handleDelete = async () => {
     try {
-      await deleteDoc(doc(db, 'users', user.uid, 'categories', id));
-      fetchCategories();
+        const categoriesCollectionRef = collection(db, 'users', user.uid, 'categories');
+        const querySnapshot = await getDocs(categoriesCollectionRef);
+
+        if (querySnapshot.size <= 1) {
+            alert('At least one category must exist.');
+            return;
+        }
+
+        await deleteDoc(doc(db, 'users', user.uid, 'categories', id));
+        fetchCategories();
     } catch (error) {
-      console.error('Error deleting category:', error);
+        console.error('Error deleting category:', error);
+        alert('Error deleting category');
     }
-  };
+};
 
 
   const handleCancel = () => {
