@@ -120,8 +120,8 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
           </>
         ) : (
           <>
-            <Typography variant="body2">Total: ${total}</Typography>
-            <Typography variant="body2">Category: {category}</Typography>
+            <Typography variant="body2"><strong>Total:</strong> ${total}</Typography>
+            <Typography variant="body2"><strong>Category:</strong> {category}</Typography>
           </>
         )}
       </CardContent>
