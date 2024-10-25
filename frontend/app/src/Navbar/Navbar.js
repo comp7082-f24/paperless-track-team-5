@@ -23,9 +23,9 @@ import { auth } from "../firebaseConfig";
 const db = getFirestore();
 
 const pages = [
-  { name: "Home", id: "home", to: "/dashboard" },
-  { name: "Analytics", id: "analytics", to: "/analytics" },
+  { name: "Receipts", id: "receipts", to: "/dashboard" },
   { name: "Categories", id: "categories", to: "/categories" },
+  { name: "Analytics", id: "analytics", to: "/analytics" },
 ];
 
 const Nav = () => {
