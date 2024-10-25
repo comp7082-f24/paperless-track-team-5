@@ -63,11 +63,6 @@ const Dashboard = ({ user }) => {
         <h1>Welcome, {loading ? 'Loading...' : username}!</h1>
     </div> */}
 
-            <ReceiptAdder
-                user={user}
-                fetchReceipts={fetchReceipts}
-            />
-
             <Typography variant="h4" gutterBottom>
                 Your Receipts
             </Typography>
@@ -85,6 +80,11 @@ const Dashboard = ({ user }) => {
                     />
                 ))}
             </div>
+
+            <ReceiptAdder
+                user={user}
+                fetchReceipts={fetchReceipts}
+            />
         </div>
     );
 };

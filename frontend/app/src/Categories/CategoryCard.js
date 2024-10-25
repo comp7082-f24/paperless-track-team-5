@@ -140,19 +140,19 @@ const CategoryCard = ({ name, monthlyBudget, color, user, id, fetchCategories })
       <CardActions>
         {isEditing ? (
           <>
-            <Button size="small" color="primary" onClick={handleSave}>
+            <Button size="small" color="primary" onClick={handleSave} variant="outlined">
               Save
             </Button>
-            <Button size="small" color="secondary" onClick={handleCancel}>
+            <Button size="small" color="secondary" onClick={handleCancel} variant="outlined">
               Cancel
             </Button>
           </>
         ) : (
           <>
-            <Button size="small" color="primary" onClick={handleEdit}>
+            <Button size="small" color="primary" onClick={handleEdit} variant="outlined">
               Edit
             </Button>
-            <Button size="small" color="secondary" onClick={handleDelete}>
+            <Button size="small" color="secondary" onClick={handleDelete} variant="outlined">
               Delete
             </Button>
           </>

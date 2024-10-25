@@ -105,10 +105,10 @@ const CategoryAdd = ({ user, fetchCategories }) => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCancel} color="secondary">
+                    <Button onClick={handleCancel} color="secondary" variant="outlined">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} color="primary">
+                    <Button onClick={handleSave} color="primary" variant="outlined">
                         Save
                     </Button>
                 </DialogActions>
