@@ -1,179 +1,137 @@
-
-
-/* src/MainPage/MainPage.css */
 .header {
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 10px; 
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    flex-wrap: wrap;
 }
 
-.receipt-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.receipt-table th, .receipt-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.receipt-table th {
-    background-color: #f2f2f2;
-}
-
-.receipt-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.receipt-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-.item-list {
+.receipt-list {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
-.item-list-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-}
-
-.total-amount {
-    margin-top: 20px;
-    font-weight: bold;
-}
-
-
-
-.dashboard-title {
+.welcome-message {
     position: absolute;
-    top: 10px;  
-    left: 10px;  
-    font-size: 24px;
-    font-weight: bold;
-    color: #333; 
+    top: 70px;
+    left: 20px;
+    margin: 0;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-
-/* Center container for welcome message, scan, upload, and receipts */
 .center-content {
     display: flex;
-    flex-direction: column; 
-    justify-content: flex-start; 
-    align-items: center; 
-    margin-top: 20px; 
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 10px;
 }
 
-/* Styling for the welcome message */
 .center-content h1 {
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
+    font-size: 1.5rem;
 }
 
-/* Button styling */
-.center-content button {
-    margin-bottom: 20px; 
+.center-content h2 {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
 }
 
-/* Upload container styling */
 .upload-container {
-    width: 400px;
-    border: 2px dashed #ccc; 
-    border-radius: 5px; 
-    padding: 20px; 
-    text-align: center; 
-    cursor: pointer; 
-    margin: 20px 0; 
-    transition: background-color 0.3s; 
+    width: 100%;
+    max-width: 100%;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: background-color 0.3s;
 }
 
 .upload-container:hover {
-    background-color: #f0f0f0; 
+    background-color: #f0f0f0;
 }
 
 .upload-container p {
     font-size: 16px;
-    font-weight: bold; 
-}
-
-/* Styling for the receipts section */
-.center-content h2 {
-    margin-bottom: 20px; /* Space below receipts heading */
-}
-
-/* Additional styling for receipt list */
-ul {
-    list-style-type: none; 
-    padding: 0; 
-    margin: 0;
-    width: 100%; 
-    max-width: 400px; 
-}
-
-.sign-out-button {
-    /* position: absolute;  */
-    /* top: 20px;  */
-    /* right: 20px;  */
-    background-color: #ff4d4d; 
-    /* width: 120px; 
-    color: white; 
-    border: none; 
-    padding: 10px; 
-    border-radius: 5px;
-    cursor: pointer; 
-    font-size: 16px; 
-    transition: background-color 0.3s ease;  */
-}
-
-.sign-out-button:hover {
-    background-color: #ff1a1a; 
+    font-weight: bold;
 }
 
 .receipt-adder {
     position: fixed;
-    bottom: 20px; /* Adjust this if needed */
+    bottom: 20px;
     right: 20px;
     z-index: 100;
-}
-
-.action-buttons {
-    display: flex;
-    flex-direction: column-reverse; /* Ensure buttons expand upwards */
-    align-items: center;
-    gap: 15px;
-    position: absolute;
-    bottom: 70px; /* Expand above the + icon */
-}
-
-.main-button {
-    z-index: 101; /* Ensure it's above the expanded buttons */
 }
 
 .camera-preview {
     position: fixed;
     bottom: 100px;
     left: 20px;
-    width: 300px; /* You can adjust the width */
-    height: 200px; /* Adjust height as needed */
-    z-index: 100; /* Ensures it stays above the page content but below the floating action buttons */
-    border: 2px solid #ccc; /* Optional styling */
-    background-color: black; /* For contrast */
-}
-
-.camera-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center align the button beneath the camera */
-    margin-bottom: 10px; /* Add spacing below the camera if needed */
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    z-index: 100;
+    border: 2px solid #ccc;
+    background-color: black;
 }
 
 .capture-button {
-    margin-top: 10px; /* Space between camera preview and button */
-    background-color: #4CAF50; /* Customize button color */
+    margin-top: 10px;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    padding: 10
+    padding: 10px;
+}
+
+.sign-out-button {
+    background-color: #ff4d4d;
+}
+
+.sign-out-button:hover {
+    background-color: #ff1a1a;
+}
+
+@media (min-width: 768px) {
+    .receipt-list {
+        max-width: 600px;
+        width: 100%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .receipt-list {
+        max-width: 800px;
+        width: 100%;
+        padding: 20px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .receipt-list {
+        max-width: 1000px;
+        width: 100%;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 440px) {
+    .header h1 {
+        font-size: 1.2rem;
+    }
+
+    .receipt-list {
+        padding: 5px;
+    }
 }
