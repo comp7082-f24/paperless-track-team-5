@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Card, CardHeader, CardContent, Typography, CardActions, Button, TextField } from '@mui/material';
-import { getFirestore, collection, addDoc, getDocs, doc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { getFirestore, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import '../MainPage.css';
 
 const db = getFirestore();
 
-const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts}) => {
+const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts }) => {
   // State to track if the card is in edit mode
   const [isEditing, setIsEditing] = useState(false);
 
@@ -24,34 +25,36 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts}) 
     };
 
     try {
-        // Update the Firestore document in the subcollection of the user
-        const receiptDocRef = doc(db, 'users', user.uid, 'receipts', id); // Use receipt.id directly
-        await updateDoc(receiptDocRef, updatedReceipt);
-        setIsEditing(false); // Exit edit mode after saving
-        fetchReceipts();
-      } catch (error) {
-        console.error('Error updating receipt:', error);
-      }
+      const receiptDocRef = doc(db, 'users', user.uid, 'receipts', id);
+      await updateDoc(receiptDocRef, updatedReceipt);
+      setIsEditing(false); // Exit edit mode after saving
+      fetchReceipts();
+    } catch (error) {
+      console.error('Error updating receipt:', error);
+    }
   };
 
-    const handleDelete = async () => {
-        try {
-            // Reference the specific receipt in the user's subcollection
-            await deleteDoc(doc(db, 'users', user.uid, 'receipts', id));
-
-            // Refresh the receipts after deletion
-            fetchReceipts();
-        } catch (error) {
-            console.error('Error deleting receipt:', error);
-        }
-    };
+  const handleDelete = async () => {
+    try {
+      await deleteDoc(doc(db, 'users', user.uid, 'receipts', id));
+      fetchReceipts();
+    } catch (error) {
+      console.error('Error deleting receipt:', error);
+    }
+  };
 
   return (
     <Card
       sx={{
-        width: '100%',
-        marginBottom: '16px',
-        padding: '16px',
+        width: { xs: '90%', sm: '70%', md: '60%', lg: '150%' }, // Responsive width for different screens
+        marginBottom: '24px', // Add margin between cards
+        padding: { xs: '20px', sm: '40px', md: '50px', lg: '60px' }, // Responsive padding
+        margin: '16px auto',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        transition: 'transform 0.2s',
+        '&:hover': { // Adding a hover effect for better interaction
+          transform: 'scale(1.02)',
+        }
       }}
     >
       <CardHeader title={isEditing ? 'Edit Receipt' : vendor} subheader={isEditing ? '' : date} />
