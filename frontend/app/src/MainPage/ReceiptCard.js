@@ -14,6 +14,7 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
   const [editTotal, setEditTotal] = useState(total);
   const [editDate, setEditDate] = useState(date);
   const [editCategory, setEditCategory] = useState(category);
+  const [categoryColor, setCategoryColor] = useState('#FFFFFF'); // Default color
 
   const [categories, setCategories] = useState([]); // State to hold fetched categories
 
@@ -23,13 +24,30 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
       const fetchCategories = async () => {
         const categoriesCollectionRef = collection(db, 'users', user.uid, 'categories');
         const querySnapshot = await getDocs(categoriesCollectionRef);
-        const fetchedCategories = querySnapshot.docs.map(doc => doc.data().name); // Extract the category names
+        const fetchedCategories = querySnapshot.docs.map(doc => ({
+          name: doc.data().name,
+          color: doc.data().color
+        }));
         setCategories(fetchedCategories);
       };
 
       fetchCategories();
     }
   }, [isEditing, user.uid]);
+
+  // Fetch the color of the selected category when the component loads or category changes
+  useEffect(() => {
+    const fetchCategoryColor = async () => {
+      const categoriesCollectionRef = collection(db, 'users', user.uid, 'categories');
+      const querySnapshot = await getDocs(categoriesCollectionRef);
+      const selectedCategory = querySnapshot.docs.find(doc => doc.data().name === category);
+      if (selectedCategory) {
+        setCategoryColor(selectedCategory.data().color); // Set color based on category
+      }
+    };
+
+    fetchCategoryColor();
+  }, [category, user.uid]);
 
   // Handle save logic
   const handleSave = async () => {
@@ -62,19 +80,41 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
   return (
     <Card
       sx={{
-        width: { xs: '75%', sm: '75%', md: '85%', lg: '110%' }, // Responsive width for different screens
+        width: { xs: '75%', sm: '75%', md: '85%', lg: '110%' },
         marginBottom: '24px',
-        padding: { xs: '10px', sm: '20px', md: '25px', lg: '30px' }, // Responsive padding
+        padding: { xs: '10px', sm: '20px', md: '25px', lg: '30px' },
         margin: '16px auto',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         transition: 'transform 0.2s',
         '&:hover': {
           transform: 'scale(1.02)',
-        }
+        },
+        position: 'relative',
+        maxWidth: '600px',
       }}
     >
-      <CardHeader title={isEditing ? 'Edit Receipt' : vendor} subheader={isEditing ? '' : date} />
-      <CardContent>
+
+      <div style={{ 
+        backgroundColor: categoryColor, 
+        height: '40px', 
+        width: 'calc(100% + 32px)',
+        position: 'absolute',
+        top: 0,
+        left: '-16px',
+        zIndex: 1,
+      }}></div>
+
+      <CardHeader
+        title={vendor}
+        subheader={date}
+        sx={{
+          position: 'relative',
+          zIndex: 2, 
+          marginTop: '50px', 
+          textAlign: 'left', 
+        }}
+      />
+      <CardContent sx={{ position: 'relative', zIndex: 2 }}>
         {isEditing ? (
           <>
             <TextField
@@ -103,8 +143,8 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
                 required
               >
                 {categories.map((cat) => (
-                  <MenuItem key={cat} value={cat}>
-                    {cat}
+                  <MenuItem key={cat.name} value={cat.name}>
+                    {cat.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -120,12 +160,16 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
           </>
         ) : (
           <>
-            <Typography variant="body2"><strong>Total:</strong> ${total}</Typography>
-            <Typography variant="body2"><strong>Category:</strong> {category}</Typography>
+            <Typography variant="body2">
+              <strong>Total:</strong> ${total}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Category:</strong> {category}
+            </Typography>
           </>
         )}
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ position: 'relative', zIndex: 2 }}>
         {isEditing ? (
           <>
             <Button size="small" color="primary" onClick={handleSave}>
