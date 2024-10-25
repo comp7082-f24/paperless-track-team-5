@@ -3,6 +3,7 @@ import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firesto
 import '../MainPage.css';
 import ReceiptAdder from './ReceiptAdder';
 import ReceiptCard from './ReceiptCard';
+import { Typography } from '@mui/material';
 
 const db = getFirestore();
 
@@ -58,16 +59,18 @@ const Dashboard = ({ user }) => {
 
     return (
         <div className="dashboard" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-    <div className="header welcome-message">
+    {/* <div className="header welcome-message">
         <h1>Welcome, {loading ? 'Loading...' : username}!</h1>
-    </div>
+    </div> */}
 
             <ReceiptAdder
                 user={user}
                 fetchReceipts={fetchReceipts}
             />
 
-            <h2>Your Receipts:</h2>
+            <Typography variant="h4" gutterBottom>
+                Your Receipts
+            </Typography>
             <div className="receipt-list">
                 {receipts.map(receipt => (
                     <ReceiptCard

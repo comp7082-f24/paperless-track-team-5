@@ -46,9 +46,9 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
   return (
     <Card
       sx={{
-        width: { xs: '90%', sm: '70%', md: '60%', lg: '150%' }, // Responsive width for different screens
+        width: { xs: '75%', sm: '75%', md: '85%', lg: '110%' }, // Responsive width for different screens
         marginBottom: '24px', // Add margin between cards
-        padding: { xs: '20px', sm: '40px', md: '50px', lg: '60px' }, // Responsive padding
+        padding: { xs: '10px', sm: '20px', md: '25px', lg: '30px' }, // Responsive padding
         margin: '16px auto',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         transition: 'transform 0.2s',
