@@ -110,7 +110,7 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
         sx={{
           position: 'relative',
           zIndex: 2, 
-          marginTop: '50px', 
+          marginTop: '25px', 
           textAlign: 'left', 
         }}
       />
@@ -169,7 +169,10 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
           </>
         )}
       </CardContent>
-      <CardActions sx={{ position: 'relative', zIndex: 2 }}>
+      <CardActions sx={{
+          position: 'relative', 
+          zIndex: 2,
+        }}>
         {isEditing ? (
           <>
             <Button size="small" color="primary" onClick={handleSave}>
