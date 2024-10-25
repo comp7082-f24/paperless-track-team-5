@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from ..config import veryfi_config
 import requests
+from datetime import datetime
 
 
 api_bp = Blueprint("api", __name__)
@@ -32,11 +33,13 @@ def process_receipt():
 
     # Return extracted receipt details from VeryFI
     vf_data = vf_response.json()
+    vf_date = datetime.strptime(vf_data['date'], "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d")
+
     receipt_data = {
         'vendor': vf_data['vendor']['name'],
         'total': vf_data['total'],
         'category': vf_data['vendor']['category'],
-        'date': vf_data['date']
+        'date': vf_date
     }
 
     return jsonify(receipt_data), 201

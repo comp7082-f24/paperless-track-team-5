@@ -45,7 +45,7 @@ const Categories = ({ user }) => {
   return (
     <div>
       <Typography variant="h4" gutterBottom>
-        Categories
+        Categories:
       </Typography>
       
       <CategoryAdd
@@ -61,8 +61,8 @@ const Categories = ({ user }) => {
               key={category.id}
               id={category.id}
               name={category.name}
-              monthlyBudget={category.monthlyBudget || 'Not Set'} // Pass "Not Set" if budget is undefined
-              color={category.color || '#000000'} // Default color if none is set
+              monthlyBudget={category.monthlyBudget || 'Not Set'}
+              color={category.color || '#FFFFFF'}
               user={user}
               fetchCategories={fetchCategories}
             />
