@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardContent, Typography, CardActions, Button, TextField } from '@mui/material';
-import { getFirestore, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardContent, Typography, CardActions, Button, TextField, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
+import { getFirestore, doc, deleteDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import '../MainPage.css';
 
 const db = getFirestore();
@@ -14,6 +14,22 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
   const [editTotal, setEditTotal] = useState(total);
   const [editDate, setEditDate] = useState(date);
   const [editCategory, setEditCategory] = useState(category);
+
+  const [categories, setCategories] = useState([]); // State to hold fetched categories
+
+  // Fetch categories when entering edit mode
+  useEffect(() => {
+    if (isEditing) {
+      const fetchCategories = async () => {
+        const categoriesCollectionRef = collection(db, 'users', user.uid, 'categories');
+        const querySnapshot = await getDocs(categoriesCollectionRef);
+        const fetchedCategories = querySnapshot.docs.map(doc => doc.data().name); // Extract the category names
+        setCategories(fetchedCategories);
+      };
+
+      fetchCategories();
+    }
+  }, [isEditing, user.uid]);
 
   // Handle save logic
   const handleSave = async () => {
@@ -47,12 +63,12 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
     <Card
       sx={{
         width: { xs: '75%', sm: '75%', md: '85%', lg: '110%' }, // Responsive width for different screens
-        marginBottom: '24px', // Add margin between cards
+        marginBottom: '24px',
         padding: { xs: '10px', sm: '20px', md: '25px', lg: '30px' }, // Responsive padding
         margin: '16px auto',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         transition: 'transform 0.2s',
-        '&:hover': { // Adding a hover effect for better interaction
+        '&:hover': {
           transform: 'scale(1.02)',
         }
       }}
@@ -78,14 +94,21 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
               onChange={(e) => setEditTotal(e.target.value)}
               required
             />
-            <TextField
-              label="Category"
-              fullWidth
-              margin="dense"
-              value={editCategory}
-              onChange={(e) => setEditCategory(e.target.value)}
-              required
-            />
+            <FormControl fullWidth margin="dense">
+              <InputLabel id="category-label">Category</InputLabel>
+              <Select
+                labelId="category-label"
+                value={editCategory}
+                onChange={(e) => setEditCategory(e.target.value)}
+                required
+              >
+                {categories.map((cat) => (
+                  <MenuItem key={cat} value={cat}>
+                    {cat}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
               label="Date"
               fullWidth
