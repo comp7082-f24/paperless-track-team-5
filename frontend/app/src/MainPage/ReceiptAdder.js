@@ -22,11 +22,15 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
     const toggleExpand = () => setIsExpanded(!isExpanded);
 
     const handleManualEntryOpen = () => setShowManualEntry(true);
-    const handleManualEntryClose = () => setShowManualEntry(false);
-
+    const handleManualEntryClose = () => {
+        setShowManualEntry(false);
+        toggleExpand();
+    }
+    
     const handleReceiptSave = () => {
         fetchReceipts(); // Refresh receipts after save
         setShowManualEntry(false); // Close the manual entry dialog
+        toggleExpand()
     };
 
     const handleFileUpload = (event) => {
@@ -72,6 +76,7 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
             });
 
             setShowReceiptConfirm(true);
+            toggleExpand()
 
         } catch (error) {
             console.error('Error uploading the receipt:', error);
@@ -124,7 +129,12 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
                 </div>
             )}
 
-            <ManualEntry user={user} open={showManualEntry} onClose={handleManualEntryClose} onSave={handleReceiptSave} />
+            <ManualEntry 
+                user={user}
+                open={showManualEntry}
+                onClose={handleManualEntryClose}
+                onSave={handleReceiptSave}
+            />
 
             {showReceiptConfirm && (
                 <ReceiptConfirm

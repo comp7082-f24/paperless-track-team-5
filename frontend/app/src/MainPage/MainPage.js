@@ -7,7 +7,6 @@ import { Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import MonthYearPicker from './MonthYearPicker';
 
-
 const db = getFirestore();
 
 const Dashboard = ({ user }) => { 
@@ -63,10 +62,6 @@ const Dashboard = ({ user }) => {
 
     return (
         <div className="dashboard" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-    {/* <div className="header welcome-message">
-        <h1>Welcome, {loading ? 'Loading...' : username}!</h1>
-    </div> */}
-
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <Typography variant="h4" gutterBottom>
                     Receipts:
@@ -74,18 +69,24 @@ const Dashboard = ({ user }) => {
                 <MonthYearPicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
             </div>
             <div className="receipt-list">
-                {receipts.map(receipt => (
-                    <ReceiptCard
-                        key={receipt.id}
-                        vendor={receipt.vendor}
-                        total={receipt.total}
-                        date={receipt.date}
-                        category={receipt.category}
-                        user={user}
-                        id={receipt.id}
-                        fetchReceipts={fetchReceipts}
-                    />
-                ))}
+                {receipts.length > 0 ? (
+                    receipts.map(receipt => (
+                        <ReceiptCard
+                            key={receipt.id}
+                            vendor={receipt.vendor}
+                            total={receipt.total}
+                            date={receipt.date}
+                            category={receipt.category}
+                            user={user}
+                            id={receipt.id}
+                            fetchReceipts={fetchReceipts}
+                        />
+                    ))
+                ) : (
+                    <Typography variant="body1" color="textSecondary" style={{ textAlign: 'center', marginTop: '20px' }}>
+                        No receipts added yet.
+                    </Typography>
+                )}
             </div>
 
             <ReceiptAdder
