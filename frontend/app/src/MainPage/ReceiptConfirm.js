@@ -4,7 +4,7 @@ import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, B
 
 const db = getFirestore();
 
-const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails, setShowPopup }) => {
+const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails, setShowReceiptConfirm }) => {
 
   const handleConfirm = async () => {
     try {
@@ -19,7 +19,7 @@ const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails
       });
 
       console.log('Receipt saved successfully');
-      setShowPopup(false); 
+      setShowReceiptConfirm(false); 
       fetchReceipts();
 
     } catch (error) {
@@ -32,7 +32,7 @@ const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails
   };
 
   const handleCancel = () => {
-    setShowPopup(false); 
+    setShowReceiptConfirm(false); 
     console.log('Receipt addition cancelled');
   };
 

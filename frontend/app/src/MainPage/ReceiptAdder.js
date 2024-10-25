@@ -1,24 +1,32 @@
+// ReceiptAdder.js
 import React, { useState } from 'react';
 import { Fab, Zoom, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import UploadIcon from '@mui/icons-material/Upload';
 import EditIcon from '@mui/icons-material/Edit';
-import { useNavigate } from 'react-router-dom';
 import CameraCapture from './Camera';
 import ReceiptConfirm from './ReceiptConfirm';
-import '../Adder.css'
+import ManualEntry from './ManualEntry';
+import '../Adder.css';
 
 const ReceiptAdder = ({ user, fetchReceipts }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [showCamera, setShowCamera] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
+    const [showReceiptConfirm, setShowReceiptConfirm] = useState(false);
+    const [showManualEntry, setShowManualEntry] = useState(false);
     const [receiptDetails, setReceiptDetails] = useState({ vendor: '', total: '', category: '', date: '' });
-    const navigate = useNavigate();
 
-    const toggleExpand = () => {
-        setIsExpanded(!isExpanded);
+
+    const toggleExpand = () => setIsExpanded(!isExpanded);
+
+    const handleManualEntryOpen = () => setShowManualEntry(true);
+    const handleManualEntryClose = () => setShowManualEntry(false);
+
+    const handleReceiptSave = () => {
+        fetchReceipts(); // Refresh receipts after save
+        setShowManualEntry(false); // Close the manual entry dialog
     };
 
     const handleFileUpload = (event) => {
@@ -63,7 +71,7 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
                 date: data.date || ''
             });
 
-            setShowPopup(true);
+            setShowReceiptConfirm(true);
 
         } catch (error) {
             console.error('Error uploading the receipt:', error);
@@ -83,7 +91,7 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
             <Zoom in={isExpanded} timeout={300}>
                 <div className="action-buttons">
                     <Tooltip title="Enter Manually" placement="left">
-                        <Fab color="secondary" onClick={() => navigate("/record")} className="manual-entry-button">
+                        <Fab color="secondary" onClick={handleManualEntryOpen} className="manual-entry-button">
                             <EditIcon />
                         </Fab>
                     </Tooltip>
@@ -116,13 +124,15 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
                 </div>
             )}
 
-            {showPopup && (
+            <ManualEntry user={user} open={showManualEntry} onClose={handleManualEntryClose} onSave={handleReceiptSave} />
+
+            {showReceiptConfirm && (
                 <ReceiptConfirm
                     user={user}
                     fetchReceipts={fetchReceipts}
                     receiptDetails={receiptDetails}
                     setReceiptDetails={setReceiptDetails}
-                    setShowPopup={setShowPopup}
+                    setShowReceiptConfirm={setShowReceiptConfirm}
                 />
             )}
         </div>
