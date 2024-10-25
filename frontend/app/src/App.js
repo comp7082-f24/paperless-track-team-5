@@ -6,7 +6,7 @@ import SignUp from './SignUp/SignUp';
 import SignIn from './SignIn/SignIn';
 import Navbar from './Navbar/Navbar'; 
 import Analytics from './Analytics';
-import Categories from './Categories';
+import Categories from './Categories/Categories';
 import UserProfile from './Userprofile';
 import ForgotPassword from './ForgotPassword';
 import Dashboard from './MainPage/MainPage'; 

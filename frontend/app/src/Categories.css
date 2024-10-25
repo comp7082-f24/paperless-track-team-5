@@ -1,0 +1,40 @@
+.category-add {
+    position: fixed;
+    bottom: 20px; /* Adjust this if needed */
+    right: 20px;
+    z-index: 100;
+}
+
+.categories-container {
+    max-height: calc((250px + 20px) * 3 - 20px); /* 3 rows of 250px cards with 20px gap between rows */
+    overflow-y: auto;  /* Make the container scrollable if more rows are added */
+    padding-right: 15px; /* Optional: add padding for a nice scrollbar appearance */
+  }
+  
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal-width columns */
+    gap: 20px; /* Spacing between the cards */
+    width: 100%;
+  }
+  
+  .categories-grid > div {
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 250px;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .categories-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 cards per row on smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .categories-grid {
+      grid-template-columns: 1fr; /* 1 card per row on very small screens */
+    }
+  }
+  
+  
