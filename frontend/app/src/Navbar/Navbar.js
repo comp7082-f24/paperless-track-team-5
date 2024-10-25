@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
   Stack,
-  Link,
+  Button,
   Toolbar,
   Typography,
   Container,
   AppBar,
-  Button,
   Drawer,
   Box,
   Menu,
@@ -17,7 +16,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../firebaseConfig";
 
 const db = getFirestore();
@@ -30,14 +29,12 @@ const pages = [
 
 const Nav = () => {
   const [open, setOpen] = useState(false);
-
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
   return (
     <>
-      {/* Mobile Menu Button */}
       <Button
         variant="text"
         onClick={toggleDrawer(true)}
@@ -46,7 +43,6 @@ const Nav = () => {
         <MenuIcon />
       </Button>
 
-      {/* Mobile Drawer */}
       <Drawer
         open={open}
         onClose={toggleDrawer(false)}
@@ -61,7 +57,6 @@ const Nav = () => {
           },
         }}
       >
-        {/* Close Drawer Button */}
         <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
           <Button onClick={toggleDrawer(false)}>
             <CloseIcon sx={{ color: "white" }} />
@@ -70,13 +65,14 @@ const Nav = () => {
         <NavList toggleDrawer={toggleDrawer} />
       </Drawer>
 
-      {/* Desktop Navigation */}
       <NavList sx={{ display: { xs: "none", sm: "inherit" } }} />
     </>
   );
 };
 
 const NavList = ({ toggleDrawer, ...props }) => {
+  const location = useLocation(); // Access the current route
+
   return (
     <Stack
       overflow="auto"
@@ -88,11 +84,13 @@ const NavList = ({ toggleDrawer, ...props }) => {
       {...props}
     >
       {pages.map((page) => (
-        <Link
+        <Button
           key={page.id}
           sx={{
-            color: { xs: "white", sm: "white", margin: "1rem", textWrap: "nowrap" },
-            textDecoration: "none",
+            color: location.pathname === page.to ? "#ffcc00" : "white",
+            fontWeight: location.pathname === page.to ? "bold" : "normal",
+            backgroundColor: "transparent",
+            textTransform: "none",
             "&:hover": {
               color: "#ffcc00",
             },
@@ -103,7 +101,7 @@ const NavList = ({ toggleDrawer, ...props }) => {
           }}
         >
           {page.name}
-        </Link>
+        </Button>
       ))}
       <SettingsMenu toggleDrawer={toggleDrawer} />
     </Stack>
@@ -147,14 +145,14 @@ const SettingsMenu = ({ toggleDrawer }) => {
 
   const handleProfileClick = () => {
     handleClose();
-    if (toggleDrawer) toggleDrawer(false)(); // Close the mobile drawer if open
+    if (toggleDrawer) toggleDrawer(false)();
     navigate("/profile");
   };
 
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      if (toggleDrawer) toggleDrawer(false)(); // Close the mobile drawer if open
+      if (toggleDrawer) toggleDrawer(false)();
       navigate("/signin");
     } catch (error) {
       console.error("Error signing out:", error);
@@ -163,10 +161,7 @@ const SettingsMenu = ({ toggleDrawer }) => {
 
   return (
     <>
-      <Button
-        onClick={handleClick}
-        sx={{ color: "white" }}
-      >
+      <Button onClick={handleClick} sx={{ color: "white" }}>
         <Avatar
           src={user.profilePicture || "https://example.com/path/to/default-profile-pic.png"}
           alt="User Profile"
@@ -207,17 +202,17 @@ const Navbar = ({ isAuthenticated }) => {
             alignItems="center"
             width="100%"
           >
-              <Typography
-                variant="h5"
-                sx={{
-                  color: "white",
-                  fontWeight: "700",
-                  letterSpacing: "1.5px",
-                  fontFamily: "'Roboto Condensed', sans-serif",
-                }}
-              >
-                PaperlessTRACK
-              </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                color: "white",
+                fontWeight: "700",
+                letterSpacing: "1.5px",
+                fontFamily: "'Roboto Condensed', sans-serif",
+              }}
+            >
+              PaperlessTRACK
+            </Typography>
             <Nav />
           </Stack>
         </Toolbar>
