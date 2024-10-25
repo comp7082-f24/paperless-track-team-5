@@ -12,3 +12,7 @@ veryfi_config = {
     "api_key": os.getenv('VF_API_KEY'),
     "api_url": os.getenv('VF_API_URL')
 }
+
+openai_config = {
+    "api_key": os.getenv('OPENAI_API_KEY')
+}

@@ -1,10 +1,31 @@
-import React from 'react';
-import { getFirestore, collection, addDoc, doc } from 'firebase/firestore';
-import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { getFirestore, collection, addDoc, doc, getDocs } from 'firebase/firestore';
+import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, Box, Select, MenuItem } from '@mui/material';
 
 const db = getFirestore();
 
 const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails, setShowReceiptConfirm }) => {
+  const [categories, setCategories] = useState([]);
+
+  // Fetch categories from Firestore
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const userRef = doc(db, 'users', user.uid);
+        const categoriesCollectionRef = collection(userRef, 'categories');
+        const categorySnapshot = await getDocs(categoriesCollectionRef);
+        const categoryList = categorySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setCategories(categoryList);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, [user.uid]);
 
   const handleConfirm = async () => {
     try {
@@ -63,15 +84,21 @@ const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails
             required
           />
 
-          <TextField
+          {/* Category Dropdown */}
+          <Select
             label="Category"
-            variant="outlined"
             name="category"
-            value={receiptDetails.category}
+            value={receiptDetails.category || ''}
             onChange={handleChange}
             fullWidth
             required
-          />
+          >
+            {categories.map((cat) => (
+              <MenuItem key={cat.id} value={cat.name}>
+                {cat.name}
+              </MenuItem>
+            ))}
+          </Select>
 
           <TextField
             label="Date"

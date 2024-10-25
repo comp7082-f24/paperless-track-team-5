@@ -1,5 +1,4 @@
-// ReceiptAdder.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Fab, Zoom, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
@@ -9,6 +8,9 @@ import CameraCapture from './Camera';
 import ReceiptConfirm from './ReceiptConfirm';
 import ManualEntry from './ManualEntry';
 import '../Adder.css';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+
+const db = getFirestore();
 
 const ReceiptAdder = ({ user, fetchReceipts }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -17,7 +19,16 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
     const [showReceiptConfirm, setShowReceiptConfirm] = useState(false);
     const [showManualEntry, setShowManualEntry] = useState(false);
     const [receiptDetails, setReceiptDetails] = useState({ vendor: '', total: '', category: '', date: '' });
+    const [categories, setCategories] = useState([]);
 
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const categoriesCollectionRef = collection(db, 'users', user.uid, 'categories');
+            const querySnapshot = await getDocs(categoriesCollectionRef);
+            setCategories(querySnapshot.docs.map(doc => doc.data().name));
+        };
+        fetchCategories();
+    }, [user.uid]);
 
     const toggleExpand = () => setIsExpanded(!isExpanded);
 
@@ -25,12 +36,12 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
     const handleManualEntryClose = () => {
         setShowManualEntry(false);
         toggleExpand();
-    }
-    
+    };
+
     const handleReceiptSave = () => {
         fetchReceipts(); // Refresh receipts after save
         setShowManualEntry(false); // Close the manual entry dialog
-        toggleExpand()
+        toggleExpand();
     };
 
     const handleFileUpload = (event) => {
@@ -54,6 +65,7 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
     const processReceipt = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('categories', JSON.stringify(categories));
 
         try {
             const response = await fetch('http://localhost:5000/api/process-receipt', {
@@ -72,12 +84,11 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
                 vendor: data.vendor || '',
                 total: data.total || '',
                 category: data.category || '',
-                date: data.date || ''
+                date: data.date || '',
             });
 
             setShowReceiptConfirm(true);
-            toggleExpand()
-
+            toggleExpand();
         } catch (error) {
             console.error('Error uploading the receipt:', error);
         }
@@ -129,7 +140,7 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
                 </div>
             )}
 
-            <ManualEntry 
+            <ManualEntry
                 user={user}
                 open={showManualEntry}
                 onClose={handleManualEntryClose}
