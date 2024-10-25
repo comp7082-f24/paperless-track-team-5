@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc, collection, addDoc } from 'firebase/firestore';
-import { Container, TextField, Button, Typography, Box, CircularProgress, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Container, TextField, Button, Typography, Box, CircularProgress } from '@mui/material';
 import { motion } from 'framer-motion';
 import '../Authen.css';
 
@@ -13,7 +13,7 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-    const [incomeType, setIncomeType] = useState('');
+    const [income, setIncome] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ const SignUp = () => {
                 await addDoc(categoriesCollectionRef, {
                     name: category.name,
                     color: category.color,
-                    monthlyBudget: null, // Set monthlyBudget to null
+                    monthlyBudget: null,
                     createdAt: new Date(),
                 });
             }
@@ -55,13 +55,12 @@ const SignUp = () => {
             await setDoc(doc(db, 'users', user.uid), {
                 username,
                 email,
-                incomeType,
+                income, // Save as income instead of incomeType
                 registrationDate: new Date(),
                 lastLogin: new Date(),
             });
 
             await createDefaultCategories(user.uid);
-            //alert('Sign-up successful! Please sign in.');
             navigate('/dashboard');
         } catch (err) {
             setError(err.message);
@@ -132,40 +131,19 @@ const SignUp = () => {
                         style={{ marginBottom: '1rem' }}
                     />
 
-                    <FormControl fullWidth variant="outlined" style={{ marginBottom: '1rem' }}>
-                        <InputLabel style={{ color: 'white' }}>Select Income Type</InputLabel>
-                        <motion.div
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            <Select
-                                value={incomeType}
-                                onChange={(e) => setIncomeType(e.target.value)}
-                                required
-                                style={{ color: 'white', backgroundColor: '#7B68EE', borderRadius: '10px', width: '100%' }}
-                                MenuProps={{
-                                    PaperProps: {
-                                        style: {
-                                            backgroundColor: '#9370DB',
-                                            color: 'white',
-                                            borderRadius: '10px',
-                                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
-                                            transition: 'transform 0.2s ease',
-                                        },
-                                    },
-                                }}
-                            >
-                                <MenuItem value="" disabled style={{ color: 'gray' }}>Select Income Type</MenuItem>
-                                <MenuItem value="Income" style={{ color: 'white', backgroundColor: '#9370DB', transition: 'background-color 0.3s ease' }}>
-                                    Income
-                                </MenuItem>
-                                <MenuItem value="Tax" style={{ color: 'white', backgroundColor: '#9370DB', transition: 'background-color 0.3s ease' }}>
-                                    Tax
-                                </MenuItem>
-                            </Select>
-                        </motion.div>
-                    </FormControl>
+                    <TextField
+                        label="Yearly Income"
+                        variant="outlined"
+                        type="number"
+                        value={income}
+                        onChange={(e) => setIncome(e.target.value)}
+                        required
+                        fullWidth
+                        className="signup-input"
+                        InputProps={{ style: { color: 'white' } }}
+                        InputLabelProps={{ style: { color: 'white' } }}
+                        style={{ marginBottom: '1rem' }}
+                    />
 
                     {error && (
                         <Typography color="error" variant="body2" style={{ marginBottom: '1rem' }}>
