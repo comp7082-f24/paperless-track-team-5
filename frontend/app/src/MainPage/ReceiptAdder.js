@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Fab, Zoom, Tooltip } from '@mui/material';
+import { Fab, Zoom, Tooltip, CircularProgress, Dialog } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import UploadIcon from '@mui/icons-material/Upload';
@@ -20,6 +20,7 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
     const [showManualEntry, setShowManualEntry] = useState(false);
     const [receiptDetails, setReceiptDetails] = useState({ vendor: '', total: '', category: '', date: '' });
     const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -63,6 +64,7 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
     };
 
     const processReceipt = async (file) => {
+        setLoading(true); // Start loading
         const formData = new FormData();
         formData.append('file', file);
         formData.append('categories', JSON.stringify(categories));
@@ -87,15 +89,22 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
                 date: data.date || '',
             });
 
-            setShowReceiptConfirm(true);
+            setLoading(false); // Stop loading once data is set
+            setShowReceiptConfirm(true); // Now show the receipt confirmation popup
             toggleExpand();
         } catch (error) {
             console.error('Error uploading the receipt:', error);
+            setLoading(false); // Stop loading in case of error
         }
     };
 
     return (
         <div className="receipt-adder">
+            {/* Loading Dialog */}
+            <Dialog open={loading} PaperProps={{ style: { backgroundColor: 'transparent', boxShadow: 'none' } }}>
+                <div style={{ padding: '100px', display: 'flex', justifyContent: 'center',  alignItems: 'center'}}><CircularProgress /></div>
+            </Dialog>
+
             {/* Main + button */}
             <Tooltip title="Add Receipt" placement="left">
                 <Fab color="primary" onClick={toggleExpand} className="main-button">
