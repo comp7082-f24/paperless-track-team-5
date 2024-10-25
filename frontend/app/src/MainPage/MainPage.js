@@ -34,6 +34,10 @@ const Dashboard = ({ user }) => {
                 querySnapshot.forEach((doc) => {
                     receiptData.push({ ...doc.data(), id: doc.id });
                 });
+                
+                // Sort receipts by date in descending order (newest first)
+                receiptData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
                 setReceipts(receiptData);
             } catch (error) {
                 console.error('Error fetching receipts: ', error);
@@ -53,6 +57,9 @@ const Dashboard = ({ user }) => {
                 querySnapshot.forEach((doc) => {
                     receiptData.push({ ...doc.data(), id: doc.id });
                 });
+                
+                receiptData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
                 setReceipts(receiptData);
             }
         } catch (error) {
