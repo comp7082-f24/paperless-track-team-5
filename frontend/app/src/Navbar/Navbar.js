@@ -15,10 +15,10 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom'; // For navigation
-import { auth } from '../firebaseConfig'; // Firebase configuration
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebaseConfig";
 
 const db = getFirestore();
 
@@ -30,12 +30,14 @@ const pages = [
 
 const Nav = () => {
   const [open, setOpen] = useState(false);
+
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
   return (
     <>
+      {/* Mobile Menu Button */}
       <Button
         variant="text"
         onClick={toggleDrawer(true)}
@@ -43,6 +45,8 @@ const Nav = () => {
       >
         <MenuIcon />
       </Button>
+
+      {/* Mobile Drawer */}
       <Drawer
         open={open}
         onClose={toggleDrawer(false)}
@@ -52,34 +56,27 @@ const Nav = () => {
           "& .MuiDrawer-paper": {
             height: "100%",
             width: "100%",
-            backgroundColor: "#1976d2", // Change background color for drawer
+            backgroundColor: "#1976d2",
             color: "white",
           },
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            p: 2,
-          }}
-        >
+        {/* Close Drawer Button */}
+        <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
           <Button onClick={toggleDrawer(false)}>
             <CloseIcon sx={{ color: "white" }} />
           </Button>
         </Box>
-        <NavList />
+        <NavList toggleDrawer={toggleDrawer} />
       </Drawer>
-      <NavList
-        sx={{
-          display: { xs: "none", sm: "inherit" },
-        }}
-      />
+
+      {/* Desktop Navigation */}
+      <NavList sx={{ display: { xs: "none", sm: "inherit" } }} />
     </>
   );
 };
 
-const NavList = (props) => {
+const NavList = ({ toggleDrawer, ...props }) => {
   return (
     <Stack
       overflow="auto"
@@ -97,40 +94,43 @@ const NavList = (props) => {
             color: { xs: "white", sm: "white", margin: "1rem", textWrap: "nowrap" },
             textDecoration: "none",
             "&:hover": {
-              color: "#ffcc00", // Hover color for links
+              color: "#ffcc00",
             },
           }}
           href={page.to}
+          onClick={() => {
+            if (toggleDrawer) toggleDrawer(false)(); // Close the drawer on click
+          }}
         >
           {page.name}
         </Link>
       ))}
-      <SettingsMenu />
+      <SettingsMenu toggleDrawer={toggleDrawer} />
     </Stack>
   );
 };
 
-const SettingsMenu = () => {
+const SettingsMenu = ({ toggleDrawer }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState({
     profilePicture: '',
   });
-  const navigate = useNavigate(); // Navigation hook
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const userId = auth.currentUser?.uid;
         if (userId) {
-          const userDoc = await getDoc(doc(db, 'users', userId));
+          const userDoc = await getDoc(doc(db, "users", userId));
           if (userDoc.exists()) {
             setUser(userDoc.data());
           } else {
-            console.error('No such document!');
+            console.error("No such document!");
           }
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       }
     };
 
@@ -147,15 +147,17 @@ const SettingsMenu = () => {
 
   const handleProfileClick = () => {
     handleClose();
-    navigate('/profile'); // Navigate to profile page
+    if (toggleDrawer) toggleDrawer(false)(); // Close the mobile drawer if open
+    navigate("/profile");
   };
 
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      navigate('/signin'); // Redirect to login after sign out
+      if (toggleDrawer) toggleDrawer(false)(); // Close the mobile drawer if open
+      navigate("/signin");
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error("Error signing out:", error);
     }
   };
 
@@ -163,26 +165,23 @@ const SettingsMenu = () => {
     <>
       <Button
         onClick={handleClick}
-        sx={{
-          color: "white",
-        }}
+        sx={{ color: "white" }}
       >
         <Avatar
-          src={user.profilePicture || 'https://example.com/path/to/default-profile-pic.png'}
+          src={user.profilePicture || "https://example.com/path/to/default-profile-pic.png"}
           alt="User Profile"
-          sx={{
-            border: '2px solid white',
-          }}
+          sx={{ border: "2px solid white" }}
         />
       </Button>
+
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
         sx={{
           "& .MuiPaper-root": {
-            backgroundColor: "#1976d2", // Menu background color
-            color: "white", // Menu item text color
+            backgroundColor: "#1976d2",
+            color: "white",
           },
         }}
       >
@@ -199,7 +198,7 @@ const Navbar = ({ isAuthenticated }) => {
   }
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: '#1976d2' }}>
+    <AppBar position="fixed" sx={{ backgroundColor: "#1976d2" }}>
       <Container>
         <Toolbar>
           <Stack
@@ -208,17 +207,12 @@ const Navbar = ({ isAuthenticated }) => {
             alignItems="center"
             width="100%"
           >
-              <Typography
-                variant="h5"
-                sx={{
-                  color: "white",
-                  fontWeight: "700",
-                  letterSpacing: "1.5px",
-                  fontFamily: "'Roboto Condensed', sans-serif",
-                }}
-              >
-                PaperlessTRACK
-              </Typography>
+            <Typography
+              variant="h6"
+              sx={{ color: "white", fontWeight: "bold" }}
+            >
+              PaperlessTrack
+            </Typography>
             <Nav />
           </Stack>
         </Toolbar>
