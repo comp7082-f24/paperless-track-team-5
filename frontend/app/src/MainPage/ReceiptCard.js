@@ -12,7 +12,7 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
   // State to track the edited values
   const [editVendor, setEditVendor] = useState(vendor);
   const [editTotal, setEditTotal] = useState(total);
-  const [editDate, setEditDate] = useState(date);
+  const [editDate, setEditDate] = useState(date || new Date().toISOString().split('T')[0]);
   const [editCategory, setEditCategory] = useState(category);
   const [categoryColor, setCategoryColor] = useState('#FFFFFF'); // Default color
 
@@ -93,7 +93,6 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
         maxWidth: '600px',
       }}
     >
-
       <div style={{ 
         backgroundColor: categoryColor, 
         height: '40px', 
@@ -151,11 +150,15 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
             </FormControl>
             <TextField
               label="Date"
+              type="date"
               fullWidth
               margin="dense"
               value={editDate}
               onChange={(e) => setEditDate(e.target.value)}
               required
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </>
         ) : (

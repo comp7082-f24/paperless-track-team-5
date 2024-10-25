@@ -76,8 +76,9 @@ const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails
           <TextField
             label="Date"
             variant="outlined"
+            type="date"
             name="date"
-            value={receiptDetails.date}
+            value={receiptDetails.date || new Date().toISOString().split('T')[0]}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             fullWidth
