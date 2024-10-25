@@ -24,7 +24,7 @@ const SignIn = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateDoc(doc(firestore, 'users', user.uid), { lastLogin: new Date() });
-      alert('Sign-in successful!');
+      //alert('Sign-in successful!');
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);
