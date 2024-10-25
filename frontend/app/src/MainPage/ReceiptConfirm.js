@@ -6,8 +6,8 @@ const db = getFirestore();
 
 const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails, setShowReceiptConfirm }) => {
   const [categories, setCategories] = useState([]);
+  const [categoriesLoaded, setCategoriesLoaded] = useState(false); // Track when categories are loaded
 
-  // Fetch categories from Firestore
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -19,6 +19,7 @@ const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails
           ...doc.data()
         }));
         setCategories(categoryList);
+        setCategoriesLoaded(true); // Indicate categories have loaded
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -85,20 +86,22 @@ const ReceiptConfirm = ({ user, fetchReceipts, receiptDetails, setReceiptDetails
           />
 
           {/* Category Dropdown */}
-          <Select
-            label="Category"
-            name="category"
-            value={receiptDetails.category || ''}
-            onChange={handleChange}
-            fullWidth
-            required
-          >
-            {categories.map((cat) => (
-              <MenuItem key={cat.id} value={cat.name}>
-                {cat.name}
-              </MenuItem>
-            ))}
-          </Select>
+          {categoriesLoaded && (
+            <Select
+              label="Category"
+              name="category"
+              value={categories.some(cat => cat.name === receiptDetails.category) ? receiptDetails.category : ''}
+              onChange={handleChange}
+              fullWidth
+              required
+            >
+              {categories.map((cat) => (
+                <MenuItem key={cat.id} value={cat.name}>
+                  {cat.name}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
 
           <TextField
             label="Date"
