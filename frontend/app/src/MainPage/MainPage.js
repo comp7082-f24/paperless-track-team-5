@@ -68,8 +68,8 @@ const Dashboard = ({ user }) => {
     };
 
     return (
-        <div className="dashboard" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="dashboard" style={{ width: '100%', margin: '0 auto', padding: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '20px' }}>
                 <Typography variant="h4" gutterBottom>
                     Receipts:
                 </Typography>

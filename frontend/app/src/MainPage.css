@@ -9,9 +9,8 @@
 .receipt-list {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
     width: 100%;
-    min-width: 600px;
     padding: 10px;
     box-sizing: border-box;
 }
@@ -47,33 +46,10 @@
     font-size: 1.2rem;
 }
 
-.upload-container {
-    width: 100%;
-    max-width: 100%;
-    border: 2px dashed #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    text-align: center;
-    cursor: pointer;
-    margin: 20px 0;
-    transition: background-color 0.3s;
-}
-
-.upload-container:hover {
-    background-color: #f0f0f0;
-}
-
-.upload-container p {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-/* .receipt-adder {
+.receipt-adder {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
     z-index: 100;
-} */
+} 
 
 .camera-preview {
     position: fixed;
@@ -101,37 +77,4 @@
 
 .sign-out-button:hover {
     background-color: #ff1a1a;
-}
-
-@media (min-width: 768px) {
-    .receipt-list {
-        max-width: 600px;
-        width: 100%;
-    }
-}
-
-@media (min-width: 1024px) {
-    .receipt-list {
-        max-width: 800px;
-        width: 100%;
-        padding: 20px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .receipt-list {
-        max-width: 1000px;
-        width: 100%;
-        padding: 30px;
-    }
-}
-
-@media (max-width: 440px) {
-    .header h1 {
-        font-size: 1.2rem;
-    }
-
-    .receipt-list {
-        padding: 5px;
-    }
 }

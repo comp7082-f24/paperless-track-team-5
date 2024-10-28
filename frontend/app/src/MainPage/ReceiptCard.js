@@ -80,7 +80,8 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
   return (
     <Card
       sx={{
-        width: { xs: '75%', sm: '75%', md: '85%', lg: '110%' },
+        width: '100%',
+        maxWidth: { xs: '80%', sm: '60%', md: '50%', lg: '30%' },
         marginBottom: '24px',
         padding: { xs: '10px', sm: '20px', md: '25px', lg: '30px' },
         margin: '16px auto',
@@ -90,7 +91,6 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
           transform: 'scale(1.02)',
         },
         position: 'relative',
-        maxWidth: '600px',
       }}
     >
       <div style={{ 
