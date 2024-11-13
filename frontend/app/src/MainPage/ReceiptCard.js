@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardContent, Typography, CardActions, Button, TextField, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+  TextField,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  Box,
+} from '@mui/material';
 import { getFirestore, doc, deleteDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
-import '../MainPage.css';
+import dayjs from 'dayjs';
 
 const db = getFirestore();
 
 const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts }) => {
-  // State to track if the card is in edit mode
   const [isEditing, setIsEditing] = useState(false);
-
-  // State to track the edited values
   const [editVendor, setEditVendor] = useState(vendor);
   const [editTotal, setEditTotal] = useState(total);
-  const [editDate, setEditDate] = useState(date || new Date().toISOString().split('T')[0]);
+  const [editDate, setEditDate] = useState(date || dayjs().format('YYYY-MM-DD'));
   const [editCategory, setEditCategory] = useState(category);
-  const [categoryColor, setCategoryColor] = useState('#FFFFFF'); // Default color
+  const [categoryColor, setCategoryColor] = useState('#FFFFFF');
+  const [categories, setCategories] = useState([]);
+  const [logoUrl, setLogoUrl] = useState('');
 
-  const [categories, setCategories] = useState([]); // State to hold fetched categories
-
-  // Fetch categories when entering edit mode
   useEffect(() => {
     if (isEditing) {
       const fetchCategories = async () => {
@@ -26,7 +35,7 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
         const querySnapshot = await getDocs(categoriesCollectionRef);
         const fetchedCategories = querySnapshot.docs.map(doc => ({
           name: doc.data().name,
-          color: doc.data().color
+          color: doc.data().color,
         }));
         setCategories(fetchedCategories);
       };
@@ -35,21 +44,50 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
     }
   }, [isEditing, user.uid]);
 
-  // Fetch the color of the selected category when the component loads or category changes
   useEffect(() => {
     const fetchCategoryColor = async () => {
       const categoriesCollectionRef = collection(db, 'users', user.uid, 'categories');
       const querySnapshot = await getDocs(categoriesCollectionRef);
       const selectedCategory = querySnapshot.docs.find(doc => doc.data().name === category);
       if (selectedCategory) {
-        setCategoryColor(selectedCategory.data().color); // Set color based on category
+        setCategoryColor(selectedCategory.data().color);
       }
     };
 
     fetchCategoryColor();
   }, [category, user.uid]);
 
-  // Handle save logic
+  useEffect(() => {
+    // Known domain mapping (this can be expanded as needed)
+    const knownDomains = {
+      'Walmart': 'walmart.com',
+      'Winners': 'winners.ca', // Adding specific domain for Winners
+    };
+
+    const normalizedVendor = vendor.toLowerCase();
+    const domain = knownDomains[vendor] || `${normalizedVendor}.com`; // Use known domain if available, else default to .com
+
+    const primaryLogoUrl = `https://logo.clearbit.com/${domain}`;
+    const alternateLogoUrl = `https://logo.clearbit.com/${normalizedVendor}.ca`; // Check .ca as a secondary fallback
+
+    const checkLogoUrl = async (url) => {
+      try {
+        const response = await fetch(url);
+        if (response.ok) {
+          setLogoUrl(url);
+        } else {
+          setLogoUrl('https://via.placeholder.com/80x40?text=No+Logo');
+        }
+      } catch (error) {
+        console.error('Error fetching logo:', error);
+        setLogoUrl('https://via.placeholder.com/80x40?text=No+Logo');
+      }
+    };
+
+    // First, try the primary logo URL based on the domain, then fallback if it fails
+    checkLogoUrl(primaryLogoUrl).catch(() => checkLogoUrl(alternateLogoUrl));
+  }, [vendor]);
+
   const handleSave = async () => {
     const updatedReceipt = {
       vendor: editVendor,
@@ -61,7 +99,7 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
     try {
       const receiptDocRef = doc(db, 'users', user.uid, 'receipts', id);
       await updateDoc(receiptDocRef, updatedReceipt);
-      setIsEditing(false); // Exit edit mode after saving
+      setIsEditing(false);
       fetchReceipts();
     } catch (error) {
       console.error('Error updating receipt:', error);
@@ -81,39 +119,57 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
     <Card
       sx={{
         width: '100%',
-        maxWidth: { xs: '80%', sm: '60%', md: '50%', lg: '30%' },
-        marginBottom: '24px',
-        padding: { xs: '10px', sm: '20px', md: '25px', lg: '30px' },
-        margin: '16px auto',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        transition: 'transform 0.2s',
+        maxWidth: { xs: '80%', sm: '60%', md: '50%', lg: '40%' },
+        margin: '24px auto',
+        padding: { xs: '15px', sm: '20px', md: '25px' },
+        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
+        transition: 'transform 0.3s',
         '&:hover': {
-          transform: 'scale(1.02)',
+          transform: 'scale(1.03)',
         },
         position: 'relative',
+        borderRadius: '12px',
+        overflow: 'hidden',
       }}
     >
-      <div style={{ 
-        backgroundColor: categoryColor, 
-        height: '40px', 
-        width: 'calc(100% + 32px)',
-        position: 'absolute',
-        top: 0,
-        left: '-16px',
-        zIndex: 1,
-      }}></div>
-
+      <Box
+        sx={{
+          backgroundColor: '#6a1b9a',  // Purple color header
+          height: '50px',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          color: '#fff',
+          fontWeight: 'bold',
+          fontSize: '1.1rem',
+          zIndex: 1,
+        }}
+      >
+        Receipt Details
+      </Box>
       <CardHeader
         title={vendor}
         subheader={date}
         sx={{
-          position: 'relative',
-          zIndex: 2, 
-          marginTop: '25px', 
-          textAlign: 'left', 
+          paddingTop: '70px',  // Offset to account for the header strip
+          paddingBottom: '8px',
+          textAlign: 'left',
+          color: '#333',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',  // Space for logo on the right
         }}
+        action={
+          logoUrl && (
+            <img src={logoUrl} alt={`${vendor} logo`} style={{ width: '60px', height: 'auto', objectFit: 'contain' }} />
+          )
+        }
       />
-      <CardContent sx={{ position: 'relative', zIndex: 2 }}>
+      <CardContent sx={{ paddingBottom: '8px' }}>
         {isEditing ? (
           <>
             <TextField
@@ -122,7 +178,6 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
               margin="dense"
               value={editVendor}
               onChange={(e) => setEditVendor(e.target.value)}
-              required
             />
             <TextField
               label="Total"
@@ -131,7 +186,6 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
               margin="dense"
               value={editTotal}
               onChange={(e) => setEditTotal(e.target.value)}
-              required
             />
             <FormControl fullWidth margin="dense">
               <InputLabel id="category-label">Category</InputLabel>
@@ -139,7 +193,6 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
                 labelId="category-label"
                 value={editCategory}
                 onChange={(e) => setEditCategory(e.target.value)}
-                required
               >
                 {categories.map((cat) => (
                   <MenuItem key={cat.name} value={cat.name}>
@@ -155,7 +208,6 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
               margin="dense"
               value={editDate}
               onChange={(e) => setEditDate(e.target.value)}
-              required
               InputLabelProps={{
                 shrink: true,
               }}
@@ -163,34 +215,31 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
           </>
         ) : (
           <>
-            <Typography variant="body2">
+            <Typography variant="body1" color="textSecondary">
               <strong>Total:</strong> ${total}
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body1" color="textSecondary">
               <strong>Category:</strong> {category}
             </Typography>
           </>
         )}
       </CardContent>
-      <CardActions sx={{
-          position: 'relative', 
-          zIndex: 2,
-        }}>
+      <CardActions sx={{ justifyContent: 'space-between' }}>
         {isEditing ? (
           <>
-            <Button size="small" color="secondary" onClick={() => setIsEditing(false)} variant="outlined">
+            <Button variant="outlined" color="secondary" onClick={() => setIsEditing(false)}>
               Cancel
             </Button>
-            <Button size="small" color="primary" onClick={handleSave} variant="outlined">
+            <Button variant="contained" color="primary" onClick={handleSave}>
               Save
             </Button>
           </>
         ) : (
           <>
-            <Button size="small" color="secondary" onClick={() => setIsEditing(true)} variant="outlined">
+            <Button variant="outlined" color="secondary" onClick={() => setIsEditing(true)}>
               Edit
             </Button>
-            <Button size="small" color="primary" onClick={handleDelete} variant="outlined">
+            <Button variant="contained" color="error" onClick={handleDelete}>
               Delete
             </Button>
           </>
