@@ -62,7 +62,7 @@ const App = () => {
                     />
                     <Route 
                         path="/analytics" 
-                        element={user ? <Analytics /> : <Navigate to="/signin" />} 
+                        element={user ? <Analytics user={user} /> : <Navigate to="/signin" />} 
                     />
                     <Route 
                         path="/categories" 
