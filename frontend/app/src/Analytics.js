@@ -9,7 +9,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, getDoc } from "firebase/firestore";
 import "./Analytics.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
@@ -28,14 +28,30 @@ const Analytics = ({ user }) => {
 
   useEffect(() => {
     const fetchAnalyticsData = async () => {
-        console.log("User object:", user);
-        console.log("User object:", user.income);
-
+      console.log("User object:", user);
 
       try {
         if (!user || !user.uid) {
           console.error("Invalid user object or uid.");
           return;
+        }
+
+        // Fetch user income from Firestore
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          console.log("Fetched user data from Firestore:", userData);
+
+          if (userData.income) {
+            console.log("User Income:", userData.income);
+            setIncomeRange({ min: userData.income - 2500, max: userData.income + 2500 });
+          } else {
+            console.error("Income field is missing in Firestore.");
+          }
+        } else {
+          console.error("No user document found in Firestore for UID:", user.uid);
         }
 
         // Fetch categories and filter only default categories
@@ -66,23 +82,16 @@ const Analytics = ({ user }) => {
         // Fetch receipts for all users and calculate aggregated spending
         const allUsersSnapshot = await getDocs(collection(db, "users"));
         let otherUsersTotal = 0;
-        let minIncome = user.income - 25000;
-        console.log(minIncome);
-        let maxIncome = user.imcome + 25000;
 
         for (const userDoc of allUsersSnapshot.docs) {
           const otherUserId = userDoc.id;
           const otherUserData = userDoc.data(); // Fetch user data
 
           // Skip the current user and filter by income range
-          if (
-            otherUserId === user.uid || 
-            !otherUserData.income || 
-            Math.abs(otherUserData.income - user.income) <= 2500
-          ) {
+          if (!otherUserData.income || otherUserId === user.uid) {
             continue;
           }
-          
+
           // Fetch this user's receipts
           const otherUserReceiptsRef = collection(db, "users", otherUserId, "receipts");
           const otherUserReceiptsSnapshot = await getDocs(otherUserReceiptsRef);
@@ -94,9 +103,6 @@ const Analytics = ({ user }) => {
             }
           });
         }
-// Handle case where no other users match the c
-  // Set income range
-  //setIncomeRange({ min: minIncome, max: maxIncome })
 
         // Prepare data for the pie chart
         const combinedData = {
@@ -214,10 +220,10 @@ const Analytics = ({ user }) => {
               }}
             />
             <p>
-  This chart compares your total spending in default categories (${combinedSpendingData.datasets[0].data[0]}) with the
-  aggregated spending of other users (${combinedSpendingData.datasets[0].data[1]}). The other users have incomes outside the range ± of your income and range from ${incomeRange.min} to ${incomeRange.max}.
-</p>
-<p>Your Income: ${user?.income || "Not Available"}</p>
+              This chart compares your total spending in default categories (${combinedSpendingData.datasets[0].data[0]}) with the
+              aggregated spending of other users (${combinedSpendingData.datasets[0].data[1]}). The other users have incomes outside the range ± of your income and range from ${incomeRange.min} to ${incomeRange.max}.
+            </p>
+            <p>Your Income: ${incomeRange.min + 2500 || "Not Available"}</p>
           </div>
         </>
       )}
