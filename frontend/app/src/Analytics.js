@@ -9,7 +9,9 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import { getFirestore, collection, doc, getDocs, getDoc, query, where } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, getDoc } from "firebase/firestore";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "./Analytics.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
@@ -17,21 +19,24 @@ ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearS
 const Analytics = ({ user }) => {
   const [categories, setCategories] = useState([]);
   const [receipts, setReceipts] = useState([]);
-  const [combinedSpendingData, setCombinedSpendingData] = useState({ labels: [], datasets: [] });
+  const [combinedSpendingData, setCombinedSpendingData] = useState({
+    labels: [],
+    datasets: [],
+  });
   const [averageSpending, setAverageSpending] = useState(500); // Default fallback value
   const [incomeRange, setIncomeRange] = useState({ min: 0, max: 0 });
   const [isLoading, setIsLoading] = useState(true);
+  const [activeChart, setActiveChart] = useState("category"); // Tracks active chart
+  const [showDateFilter, setShowDateFilter] = useState(false); // Toggles date picker visibility
 
-  // Set initial start and end date to the current month's range
+  // Default date range: current month
   const now = new Date();
-  const initialStartDate = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split("T")[0]; // First day of the month
-  const initialEndDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0]; // Last day of the month
-
+  const initialStartDate = new Date(now.getFullYear(), now.getMonth(), 1);
+  const initialEndDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
 
   const db = getFirestore();
-
   const defaultCategories = ["Housing", "Grocery", "Transportation", "Utilities", "Entertainment", "Travel"];
 
   useEffect(() => {
@@ -44,7 +49,9 @@ const Analytics = ({ user }) => {
           return;
         }
 
-        // Fetch user income from Firestore
+        setIsLoading(true);
+
+        // Fetch user income
         const userDocRef = doc(db, "users", user.uid);
         const userDocSnap = await getDoc(userDocRef);
 
@@ -65,7 +72,7 @@ const Analytics = ({ user }) => {
           console.error("No user document found in Firestore for UID:", user.uid);
         }
 
-        // Fetch categories and filter only default categories
+        // Fetch categories
         const categoriesCollectionRef = collection(db, "users", user.uid, "categories");
         const categoriesSnapshot = await getDocs(categoriesCollectionRef);
         const categoriesData = categoriesSnapshot.docs
@@ -76,12 +83,11 @@ const Analytics = ({ user }) => {
           .filter((category) => defaultCategories.includes(category.name)); // Only include default categories
         setCategories(categoriesData);
 
-        // Fetch receipts for the current user
+        // Fetch receipts
         const receiptsCollectionRef = collection(db, "users", user.uid, "receipts");
         const receiptsSnapshot = await getDocs(receiptsCollectionRef);
         const receiptsData = receiptsSnapshot.docs.map((doc) => {
           const data = doc.data();
-          // Convert `date` string to Date object for filtering
           return {
             ...data,
             date: new Date(data.date), // Convert date string to Date object
@@ -90,17 +96,14 @@ const Analytics = ({ user }) => {
 
         // Filter receipts by date range
         const filteredReceipts = receiptsData.filter((receipt) => {
-          const receiptDate = receipt.date; // Already a Date object
-          const start = new Date(startDate);
-          const end = new Date(endDate);
-
-          return receiptDate >= start && receiptDate <= end;
+          const receiptDate = receipt.date;
+          return receiptDate >= startDate && receiptDate <= endDate;
         });
 
         console.log("Filtered receipts:", filteredReceipts);
         setReceipts(filteredReceipts);
 
-        // Calculate current user's total spending across default categories
+        // Calculate current user's total spending
         let currentUserTotal = 0;
         filteredReceipts.forEach((receipt) => {
           if (defaultCategories.includes(receipt.category)) {
@@ -114,14 +117,13 @@ const Analytics = ({ user }) => {
 
         for (const userDoc of allUsersSnapshot.docs) {
           const otherUserId = userDoc.id;
-          const otherUserData = userDoc.data(); // Fetch user data
+          const otherUserData = userDoc.data();
 
-          // Skip the current user and filter by income range
+          // Skip current user and filter by income range
           if (!otherUserData.income || otherUserId === user.uid) {
             continue;
           }
 
-          // Fetch this user's receipts
           const otherUserReceiptsRef = collection(db, "users", otherUserId, "receipts");
           const otherUserReceiptsSnapshot = await getDocs(otherUserReceiptsRef);
 
@@ -133,8 +135,7 @@ const Analytics = ({ user }) => {
           });
         }
 
-        // Prepare data for the pie chart
-        const combinedData = {
+        setCombinedSpendingData({
           labels: ["Your Spending", "Other Users' Spending"],
           datasets: [
             {
@@ -144,20 +145,16 @@ const Analytics = ({ user }) => {
               hoverBackgroundColor: ["#36A2EB", "#FF6384"],
             },
           ],
-        };
+        });
 
-        setCombinedSpendingData(combinedData);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching analytics data:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
-
     fetchAnalyticsData();
-  }, [user, startDate, endDate]); // Rerun when date range changes
+  }, [user, startDate, endDate]);
 
-  // Prepare data for charts
   const categoryBreakdownData = {
     labels: categories.map((category) => category.name),
     datasets: [
@@ -174,15 +171,14 @@ const Analytics = ({ user }) => {
     ],
   };
 
-  // Prepare top 5 vendors for the bar chart
   const vendorSpending = receipts.reduce((acc, receipt) => {
     acc[receipt.vendor] = (acc[receipt.vendor] || 0) + parseFloat(receipt.total || 0);
     return acc;
   }, {});
 
   const topVendors = Object.entries(vendorSpending)
-    .sort(([, a], [, b]) => b - a) // Sort by spending descending
-    .slice(0, 5); // Take top 5 vendors
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5);
 
   const vendorSpendingData = {
     labels: topVendors.map(([vendor]) => vendor),
@@ -190,67 +186,94 @@ const Analytics = ({ user }) => {
       {
         label: "Top 5 Vendors by Spending",
         data: topVendors.map(([, spending]) => spending),
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#8E44AD", "#FFA500"], // Add more colors as needed
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#8E44AD", "#FFA500"],
         hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#8E44AD", "#FFA500"],
       },
     ],
   };
 
+  const handleChartSwitch = (chart) => {
+    setActiveChart(chart);
+  };
+
+  const toggleDateFilter = () => {
+    setShowDateFilter((prev) => !prev);
+  };
+
   return (
     <div className="analytics-container">
       <h2>Analytics</h2>
-      <div className="date-filter">
-        <label>
-          Start Date:
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        </label>
-        <label>
-          End Date:
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-        </label>
+
+      {/* Filter Button */}
+      <button className="filter-button" onClick={toggleDateFilter}>
+        {showDateFilter ? "Hide Filter" : "Show Filter"}
+      </button>
+
+      {/* Conditional Date Filter */}
+      {showDateFilter && (
+        <div className="date-picker-container">
+          <div className="date-picker">
+            <label htmlFor="start-date">Start Date:</label>
+            <DatePicker
+              id="start-date"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+            />
+          </div>
+          <div className="date-picker">
+            <label htmlFor="end-date">End Date:</label>
+            <DatePicker
+              id="end-date"
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Chart Selector Buttons */}
+      <div className="chart-buttons">
+        <button onClick={() => handleChartSwitch("category")}>Category Breakdown</button>
+        <button onClick={() => handleChartSwitch("vendors")}>Top Vendors</button>
+        <button onClick={() => handleChartSwitch("comparison")}>Spending Comparison</button>
       </div>
+
       {isLoading ? (
         <p>Loading...</p>
       ) : receipts.length === 0 ? (
         <p>No receipts to display. Please add some receipts.</p>
       ) : (
-        <>
-          <div className="chart-section">
-            <h3>Category Breakdown</h3>
-            <Pie data={categoryBreakdownData} />
-          </div>
-          <div className="chart-section">
-            <h3>Top 5 Vendors</h3>
-            <Bar
-              data={vendorSpendingData}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: "top",
-                  },
-                },
-              }}
-            />
-            <p>This chart shows your top 5 vendors by spending.</p>
-          </div>
-          <div className="chart-section">
-            <h3>Your Spending vs. Other Users' Spending</h3>
-            <Pie data={combinedSpendingData} />
-            <p>
-              This chart compares your total spending in default categories (${combinedSpendingData.datasets[0].data[0]}) with the
-              aggregated spending of other users (${combinedSpendingData.datasets[0].data[1]}). The other users have incomes outside the range ± of your income and range from ${incomeRange.min} to ${incomeRange.max}.
-            </p>
-          </div>
-        </>
+        <div className="chart-section">
+          {activeChart === "category" && (
+            <>
+              <h3>Category Breakdown</h3>
+              <Pie data={categoryBreakdownData} />
+            </>
+          )}
+          {activeChart === "vendors" && (
+            <>
+              <h3>Top 5 Vendors</h3>
+              <Bar
+                data={vendorSpendingData}
+                options={{
+                  responsive: true,
+                  plugins: { legend: { position: "top" } },
+                }}
+              />
+              <p>This chart shows your top 5 vendors by spending.</p>
+            </>
+          )}
+          {activeChart === "comparison" && (
+            <>
+              <h3>Your Spending vs. Other Users</h3>
+              <Pie data={combinedSpendingData} />
+              <p>
+                This chart compares your total spending in default categories (${combinedSpendingData.datasets[0].data[0]}) with the
+                aggregated spending of other users (${combinedSpendingData.datasets[0].data[1]}). The other users have incomes outside the range ± of your income and range from ${incomeRange.min} to ${incomeRange.max}.
+              </p>
+            </>
+          )}
+        </div>
       )}
     </div>
   );

@@ -23,4 +23,93 @@
     font-size: 1rem;
     color: #555;
   }
+  .chart-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
+    margin: 20px 0; /* Add spacing around the buttons */
+  }
+  
+  .chart-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .chart-buttons button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .chart-buttons button:active {
+    background-color: #d0d0d0;
+  }
+  
+  .chart-buttons button:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  .date-picker-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between date pickers */
+    margin: 20px 0; /* Add spacing around the date picker section */
+    align-items: center; /* Align items vertically in the center */
+  }
+  
+
+  .filter-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filter-button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .filter-button:active {
+    background-color: #d0d0d0;
+  }
+  
+  .date-picker-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between date pickers */
+    margin: 20px 0; /* Add spacing around the date picker section */
+    align-items: center; /* Align items vertically in the center */
+  }
+  
+  .date-picker {
+    display: flex;
+    flex-direction: column; /* Stack label and input vertically */
+    align-items: center; /* Center align the label and input */
+    font-size: 14px;
+  }
+  
+  .date-picker label {
+    margin-bottom: 5px; /* Space between label and date picker */
+    font-weight: bold;
+  }
+  
+  .date-picker input {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .date-picker input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
   
