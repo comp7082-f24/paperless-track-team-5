@@ -268,7 +268,7 @@ const Analytics = ({ user }) => {
               <h3>Your Spending vs. Other Users</h3>
               <Pie data={combinedSpendingData} />
               <p>
-                This chart compares your total spending in default categories (${combinedSpendingData.datasets[0].data[0]}) with the
+                This charts compares your total spending in default categories (${combinedSpendingData.datasets[0].data[0]}) with the
                 aggregated spending of other users (${combinedSpendingData.datasets[0].data[1]}). The other users have incomes outside the range ± of your income and range from ${incomeRange.min} to ${incomeRange.max}.
               </p>
             </>
