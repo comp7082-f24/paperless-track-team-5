@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { getFirestore, doc, deleteDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import dayjs from 'dayjs';
+import { Theme } from '../themes/Theme'
 
 const db = getFirestore();
 
@@ -134,7 +135,7 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
     >
       <Box
         sx={{
-          backgroundColor: '#6a1b9a',  // Purple color header
+          backgroundColor: Theme.palette.primary.main,  // Purple color header
           height: '50px',
           width: '100%',
           display: 'flex',
@@ -143,7 +144,7 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
           position: 'absolute',
           top: 0,
           left: 0,
-          color: '#fff',
+          color: Theme.palette.background.paper,
           fontWeight: 'bold',
           fontSize: '1.1rem',
           zIndex: 1,
@@ -158,7 +159,7 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
           paddingTop: '70px',  // Offset to account for the header strip
           paddingBottom: '8px',
           textAlign: 'left',
-          color: '#333',
+          color: Theme.palette.text.primary,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',  // Space for logo on the right
@@ -215,10 +216,10 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
           </>
         ) : (
           <>
-            <Typography variant="body1" color="textSecondary">
+            <Typography variant="body1" color= {Theme.palette.text.secondrary} >
               <strong>Total:</strong> ${total}
             </Typography>
-            <Typography variant="body1" color="textSecondary">
+            <Typography variant="body1" color= {Theme.palette.text.secondary}>
               <strong>Category:</strong> {category}
             </Typography>
           </>

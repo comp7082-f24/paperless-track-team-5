@@ -22,6 +22,7 @@ import { createTheme } from "@mui/material";
         primary: '#000000',
         secondary: '#757575',
         disabled: '#BDBDBD',
+        contrast: '#ffffff'
       },
       accent: {
         main: '#023246',

@@ -9,6 +9,8 @@ import ReceiptConfirm from './ReceiptConfirm';
 import ManualEntry from './ManualEntry';
 import '../Adder.css';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { Theme } from '../themes/Theme';
+
 
 const db = getFirestore();
 
@@ -107,7 +109,7 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
 
             {/* Main + button */}
             <Tooltip title="Add Receipt" placement="left">
-                <Fab color="primary" onClick={toggleExpand} className="main-button">
+                <Fab color={Theme.palette.primary.main} onClick={toggleExpand} className="main-button">
                     <AddIcon />
                 </Fab>
             </Tooltip>
@@ -116,19 +118,19 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
             <Zoom in={isExpanded} timeout={300}>
                 <div className="action-buttons">
                     <Tooltip title="Enter Manually" placement="left">
-                        <Fab color="secondary" onClick={handleManualEntryOpen} className="manual-entry-button">
+                        <Fab style={{backgroundColor: Theme.palette.accent.main, color: Theme.palette.text.contrast}} onClick={handleManualEntryOpen} className="manual-entry-button">
                             <EditIcon />
                         </Fab>
                     </Tooltip>
 
-                    <Tooltip title="Scan with Camera" placement="left">
-                        <Fab color="secondary" onClick={() => setShowCamera(!showCamera)} className="camera-button">
+                    <Tooltip title="Scan with Camera" placement="left" backgroundColor={Theme.palette.accent.main}> 
+                        <Fab style={{backgroundColor: Theme.palette.accent.main, color: Theme.palette.text.contrast}} onClick={() => setShowCamera(!showCamera)} className="camera-button">
                             <CameraAltIcon />
                         </Fab>
                     </Tooltip>
 
                     <Tooltip title="File Upload" placement="left">
-                        <Fab color="secondary" onClick={() => document.getElementById('file-input').click()} className="upload-button">
+                        <Fab style={{backgroundColor: Theme.palette.accent.main, color: Theme.palette.text.contrast}} onClick={() => document.getElementById('file-input').click()} className="upload-button">
                             <UploadIcon />
                         </Fab>
                     </Tooltip>
