@@ -18,6 +18,7 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../firebaseConfig";
+import { Theme } from "../themes/Theme"
 
 const db = getFirestore();
 
@@ -38,7 +39,7 @@ const Nav = () => {
       <Button
         variant="text"
         onClick={toggleDrawer(true)}
-        sx={{ color: "white", display: { xs: "flex", sm: "none" }, justifyContent: "right" }}
+        sx={{ color: Theme.palette.text.contrast, display: { xs: "flex", sm: "none" }, justifyContent: "right" }}
       >
         <MenuIcon />
       </Button>
@@ -52,7 +53,7 @@ const Nav = () => {
           "& .MuiDrawer-paper": {
             height: "100%",
             width: "100%",
-            backgroundColor: "#1976d2",
+            backgroundColor: Theme.palette.primary.main,
             color: "white",
           },
         }}
@@ -161,7 +162,7 @@ const SettingsMenu = ({ toggleDrawer }) => {
 
   return (
     <>
-      <Button onClick={handleClick} sx={{ color: "white" }}>
+      <Button onClick={handleClick} sx={{ color: Theme.palette.text.contrast }}>
         <Avatar
           src={user.profilePicture || "https://example.com/path/to/default-profile-pic.png"}
           alt="User Profile"
@@ -175,7 +176,7 @@ const SettingsMenu = ({ toggleDrawer }) => {
         onClose={handleClose}
         sx={{
           "& .MuiPaper-root": {
-            backgroundColor: "#1976d2",
+            backgroundColor: Theme.palette.primary.main,
             color: "white",
           },
         }}
@@ -193,7 +194,7 @@ const Navbar = ({ isAuthenticated }) => {
   }
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "#1976d2" }}>
+    <AppBar position="fixed" sx={{ backgroundColor: Theme.palette.primary.main }}>
       <Container>
         <Toolbar>
           <Stack
@@ -205,7 +206,7 @@ const Navbar = ({ isAuthenticated }) => {
             <Typography
               variant="h5"
               sx={{
-                color: "white",
+                color: Theme.palette.text.contrast,
                 fontWeight: "700",
                 letterSpacing: "1.5px",
                 fontFamily: "'Roboto Condensed', sans-serif",
