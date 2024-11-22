@@ -109,7 +109,13 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
 
             {/* Main + button */}
             <Tooltip title="Add Receipt" placement="left">
-                <Fab sx={{backgroundColor: Theme.palette.primary.main, color: Theme.palette.primary.contrastText}} onClick={toggleExpand} className="main-button">
+                <Fab sx={{
+                    backgroundColor: Theme.palette.primary.main, 
+                    color: Theme.palette.primary.contrastText, 
+                    '&:hover': {
+                        color: Theme.palette.accent.main
+                      }, }} 
+                      onClick={toggleExpand} >
                     <AddIcon  />
                 </Fab>
             </Tooltip>
@@ -118,19 +124,44 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
             <Zoom in={isExpanded} timeout={300}>
                 <div className="action-buttons">
                     <Tooltip title="Enter Manually" placement="left">
-                        <Fab style={{backgroundColor: Theme.palette.accent.main, color: Theme.palette.text.contrast}} onClick={handleManualEntryOpen} className="manual-entry-button">
+                        <Fab 
+                            sx={{
+                                backgroundColor: Theme.palette.primary.main, 
+                                color: Theme.palette.text.contrast,
+                                '&:hover': {
+                                    color: Theme.palette.accent.main,
+                                }
+                            }}  
+                            onClick={handleManualEntryOpen} 
+                            >
                             <EditIcon />
                         </Fab>
                     </Tooltip>
 
                     <Tooltip title="Scan with Camera" placement="left" backgroundColor={Theme.palette.accent.main}> 
-                        <Fab style={{backgroundColor: Theme.palette.accent.main, color: Theme.palette.text.contrast}} onClick={() => setShowCamera(!showCamera)} className="camera-button">
+                        <Fab 
+                            sx={{
+                                backgroundColor: Theme.palette.primary.main, 
+                                color: Theme.palette.text.contrast,
+                                '&:hover': {
+                                    color: Theme.palette.accent.main,
+                                }
+                            }} 
+                                onClick={() => setShowCamera(!showCamera)} className="camera-button">
                             <CameraAltIcon />
                         </Fab>
                     </Tooltip>
 
                     <Tooltip title="File Upload" placement="left">
-                        <Fab style={{backgroundColor: Theme.palette.accent.main, color: Theme.palette.text.contrast}} onClick={() => document.getElementById('file-input').click()} className="upload-button">
+                        <Fab 
+                            sx={{
+                                backgroundColor: Theme.palette.primary.main, 
+                                color: Theme.palette.text.contrast,
+                                '&:hover': {
+                                    color: Theme.palette.accent.main,
+                                }
+                            }} 
+                            onClick={() => document.getElementById('file-input').click()} className="upload-button">
                             <UploadIcon />
                         </Fab>
                     </Tooltip>

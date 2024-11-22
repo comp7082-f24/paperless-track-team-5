@@ -228,19 +228,49 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
       <CardActions sx={{ justifyContent: 'space-between' }}>
         {isEditing ? (
           <>
-            <Button variant="outlined" sx={{color: Theme.palette.primary.dark, borderColor: Theme.palette.primary.dark}} onClick={() => setIsEditing(false)} >
+            <Button variant="outlined" 
+                    sx={{
+                      color: Theme.palette.primary.dark, 
+                      borderColor: Theme.palette.primary.dark, 
+                      '&:hover': {
+                        background: Theme.palette.secondary.light,
+                        color: Theme.palette.accent.main}}} 
+                      onClick={() => setIsEditing(false)} >
               Cancel
             </Button>
-            <Button variant="contained"  sx={{backgroundColor: Theme.palette.primary.dark}} onClick={handleSave} >
+            <Button variant="contained"  
+                    sx={{
+                      backgroundColor: Theme.palette.primary.dark, 
+                      color: Theme.palette.primary.contrastText,
+                      '&:hover': {
+                        background: Theme.palette.primary.main,
+                        }
+                      }}
+                    onClick={handleSave} >
               Save
             </Button>
           </>
         ) : (
           <>
-            <Button variant="outlined" sx={{color: Theme.palette.primary.dark, borderColor: Theme.palette.primary.dark}} onClick={() => setIsEditing(true)}>
+            <Button variant="outlined" 
+                    sx={{
+                      color: Theme.palette.primary.dark, 
+                      borderColor: Theme.palette.primary.dark, 
+                      '&:hover': {
+                        background: Theme.palette.secondary.light,
+                        color: Theme.palette.accent.main}}}  
+                    onClick={() => setIsEditing(true)}>
               Edit
             </Button>
-            <Button variant="contained" sx={{backgroundColor: Theme.palette.primary.dark}} onClick={handleDelete}>
+            <Button variant="contained" 
+                    sx={{
+                      backgroundColor: Theme.palette.primary.dark, 
+                      color: Theme.palette.primary.contrastText,
+                      '&:hover': {
+                        background: Theme.palette.primary.main,
+                        }
+                      }}
+                    onClick={handleDelete}>
               Delete
             </Button>
           </>

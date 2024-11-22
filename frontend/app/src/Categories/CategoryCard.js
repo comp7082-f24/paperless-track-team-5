@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardHeader, CardContent, Typography, CardActions, Button, TextField, Box } from '@mui/material';
 import { getFirestore, doc, deleteDoc, updateDoc, collection, query, getDocs } from 'firebase/firestore';
+import { Theme } from "../themes/Theme"
 
 const db = getFirestore();
 
@@ -149,19 +150,50 @@ const CategoryCard = ({ name, monthlyBudget, color, user, id, fetchCategories })
       <CardActions>
         {isEditing ? (
           <>
-            <Button size="small" color="secondary" onClick={handleCancel} variant="outlined">
+            <Button size="small" 
+                    sx={{
+                      color: Theme.palette.primary.dark, 
+                      borderColor: Theme.palette.primary.dark, 
+                      '&:hover': {
+                        background: Theme.palette.secondary.light,
+                        color: Theme.palette.accent.main}
+                      }} 
+                    onClick={handleCancel} variant="outlined">
               Cancel
             </Button>
-            <Button size="small" color="primary" onClick={handleSave} variant="outlined">
+            <Button size="small" 
+                    sx={{
+                      backgroundColor: Theme.palette.primary.dark, 
+                      color: Theme.palette.primary.contrastText,
+                      '&:hover': {
+                        background: Theme.palette.primary.main,
+                        }
+                      }} 
+                      onClick={handleSave}>
               Save
             </Button>
           </>
         ) : (
           <>
-            <Button size="small" color="secondary" onClick={handleEdit} variant="outlined">
+            <Button size="small" 
+                    sx={{
+                      color: Theme.palette.primary.dark, 
+                      borderColor: Theme.palette.primary.dark, 
+                      '&:hover': {
+                        background: Theme.palette.secondary.light,
+                        color: Theme.palette.accent.main}}} 
+                    onClick={handleEdit} variant="outlined">
               Edit
             </Button>
-            <Button size="small" color="primary" onClick={handleDelete} variant="outlined">
+            <Button size="small" 
+                    sx={{
+                      backgroundColor: Theme.palette.primary.dark, 
+                      color: Theme.palette.primary.contrastText,
+                      '&:hover': {
+                        background: Theme.palette.primary.main,
+                        }
+                      }} 
+                    onClick={handleDelete} >
               Delete
             </Button>
           </>

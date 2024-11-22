@@ -1,7 +1,7 @@
 .category-add {
     position: fixed;
     bottom: 20px; /* Adjust this if needed */
-    right: 20px;
+    right: 15px;
     z-index: 100;
 }
 

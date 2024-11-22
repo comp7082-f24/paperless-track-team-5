@@ -43,16 +43,11 @@ const Categories = ({ user }) => {
   };
 
   return (
-    <div className='app-container-justified'>
-      <Typography variant="h5" sx={{ fontWeight: 'bold' }} gutterBottom>
+    <div>
+      {/* <Typography variant="h5" sx={{ fontWeight: 'bold' }} gutterBottom>
         Categories
-      </Typography>
+      </Typography> */}
       
-      <CategoryAdd
-        user={user}
-        fetchCategories={fetchCategories}
-      />
-
       {/* Scrollable container for categories */}
       <div className="categories-container">
         {categories.length > 0 ? (
@@ -74,6 +69,11 @@ const Categories = ({ user }) => {
             No categories created yet.
           </Typography>
         )}
+         <CategoryAdd
+        user={user}
+        fetchCategories={fetchCategories}
+        />
+
       </div>
     </div>
   );

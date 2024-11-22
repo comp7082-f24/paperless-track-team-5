@@ -172,9 +172,10 @@ const Dashboard = ({ user }) => {
                         No receipts found.
                     </Typography>
                 )}
+                <ReceiptAdder user={user} fetchReceipts={fetchReceipts} />
             </Box>
 
-            <ReceiptAdder user={user} fetchReceipts={fetchReceipts} />
+            
         </Box>
     );
 };
