@@ -109,8 +109,8 @@ const ReceiptAdder = ({ user, fetchReceipts }) => {
 
             {/* Main + button */}
             <Tooltip title="Add Receipt" placement="left">
-                <Fab color={Theme.palette.primary.main} onClick={toggleExpand} className="main-button">
-                    <AddIcon />
+                <Fab sx={{backgroundColor: Theme.palette.primary.main, color: Theme.palette.primary.contrastText}} onClick={toggleExpand} className="main-button">
+                    <AddIcon  />
                 </Fab>
             </Tooltip>
 

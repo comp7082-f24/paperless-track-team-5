@@ -43,9 +43,9 @@ const Categories = ({ user }) => {
   };
 
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
-        Categories:
+    <div className='app-container-justified'>
+      <Typography variant="h5" sx={{ fontWeight: 'bold' }} gutterBottom>
+        Categories
       </Typography>
       
       <CategoryAdd

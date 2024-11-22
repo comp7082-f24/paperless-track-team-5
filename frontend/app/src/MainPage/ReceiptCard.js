@@ -135,7 +135,7 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
     >
       <Box
         sx={{
-          backgroundColor: Theme.palette.primary.main,  // Purple color header
+          backgroundColor: Theme.palette.primary.main,  
           height: '50px',
           width: '100%',
           display: 'flex',
@@ -228,19 +228,19 @@ const ReceiptCard = ({ vendor, total, category, date, user, id, fetchReceipts })
       <CardActions sx={{ justifyContent: 'space-between' }}>
         {isEditing ? (
           <>
-            <Button variant="outlined" color="secondary" onClick={() => setIsEditing(false)}>
+            <Button variant="outlined" sx={{color: Theme.palette.primary.dark, borderColor: Theme.palette.primary.dark}} onClick={() => setIsEditing(false)} >
               Cancel
             </Button>
-            <Button variant="contained" color="primary" onClick={handleSave}>
+            <Button variant="contained"  sx={{backgroundColor: Theme.palette.primary.dark}} onClick={handleSave} >
               Save
             </Button>
           </>
         ) : (
           <>
-            <Button variant="outlined" color="secondary" onClick={() => setIsEditing(true)}>
+            <Button variant="outlined" sx={{color: Theme.palette.primary.dark, borderColor: Theme.palette.primary.dark}} onClick={() => setIsEditing(true)}>
               Edit
             </Button>
-            <Button variant="contained" color="error" onClick={handleDelete}>
+            <Button variant="contained" sx={{backgroundColor: Theme.palette.primary.dark}} onClick={handleDelete}>
               Delete
             </Button>
           </>

@@ -13,6 +13,9 @@ import { getFirestore, collection, doc, getDocs, getDoc } from "firebase/firesto
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Analytics.css";
+import { Button, ButtonGroup, Typography, Box } from "@mui/material"
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { Theme } from "./themes/Theme"
 
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
@@ -202,12 +205,16 @@ const Analytics = ({ user }) => {
 
   return (
     <div className="analytics-container">
-      <h2>Analytics</h2>
+      <Typography variant="h5" sx={{ fontWeight: 'bold' }} gutterBottom>Analytics</Typography>
 
       {/* Filter Button */}
-      <button className="filter-button" onClick={toggleDateFilter}>
-        {showDateFilter ? "Hide Filter" : "Show Filter"}
-      </button>
+      <Box sx={{alignSelf: 'flex-end'}}>
+        <Button onClick={toggleDateFilter} sx={{color: Theme.palette.primary.dark, borderColor: Theme.palette.primary.dark}}>
+          <FilterListIcon />
+          {showDateFilter ? "Filter" : "Filter"}
+        </Button>
+      </Box>
+     
 
       {/* Conditional Date Filter */}
       {showDateFilter && (
@@ -232,11 +239,11 @@ const Analytics = ({ user }) => {
       )}
 
       {/* Chart Selector Buttons */}
-      <div className="chart-buttons">
-        <button onClick={() => handleChartSwitch("category")}>Category Breakdown</button>
-        <button onClick={() => handleChartSwitch("vendors")}>Top Vendors</button>
-        <button onClick={() => handleChartSwitch("comparison")}>Spending Comparison</button>
-      </div>
+      <ButtonGroup variant="text" color ={Theme.palette.primary.dark} >
+        <Button onClick={() => handleChartSwitch("category")} sx={{color: Theme.palette.primary.dark, borderColor: Theme.palette.primary.dark}}>Category Breakdown</Button>
+        <Button onClick={() => handleChartSwitch("vendors")} sx={{color: Theme.palette.primary.dark, borderColor: Theme.palette.primary.dark}}>Top Vendors</Button>
+        <Button onClick={() => handleChartSwitch("comparison")} sx={{color: Theme.palette.primary.dark, borderColor: Theme.palette.primary.dark}}>Spending Comparison</Button>
+      </ButtonGroup>
 
       {isLoading ? (
         <p>Loading...</p>
