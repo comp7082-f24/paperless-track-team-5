@@ -47,9 +47,9 @@ jobs:
         node-version: '16'
 
     - name: Install dependencies
-      working-directory: ./frontend
+      working-directory: ./frontend/app
       run: npm install
 
     - name: Run Jest tests
-      working-directory: ./frontend
+      working-directory: ./frontend/app
       run: npm test
