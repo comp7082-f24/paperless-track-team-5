@@ -13,6 +13,7 @@ import Dashboard from './MainPage/MainPage';
 import './style.css'; 
 import ManualUpload from './MainPage/ManualEntry';
 import LandingPage from './LandingPage';  // Import the Header (landing page)
+import ErrorBoundary from './ErrorBoundary'; // Adjust the import path as necessary
 
 const App = () => {
     const [isSignUp, setIsSignUp] = useState(false); 
@@ -39,46 +40,48 @@ const App = () => {
     }
 
     return (
-        <Router>
-            <div className="app-container">
-                {/* Render Navbar only if user is authenticated */}
-                <Navbar isAuthenticated={!!user} />
-                <Routes>
-                    {/* Default route to LandingPage (Landing Page) when user is not authenticated */}
-                    <Route 
-                        path="/" 
-                        element={user ? <Navigate to="/dashboard" /> : <LandingPage />} 
-                    />
-                    
-                    {/* Sign Up and Sign In routes */}
-                    <Route path="/signin" element={<SignIn toggleForm={toggleForm} />} />
-                    <Route path="/signup" element={<SignUp toggleForm={toggleForm} />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} /> 
+        <ErrorBoundary>
+            <Router>
+                <div className="app-container">
+                    {/* Render Navbar only if user is authenticated */}
+                    <Navbar isAuthenticated={!!user} />
+                    <Routes>
+                        {/* Default route to LandingPage (Landing Page) when user is not authenticated */}
+                        <Route 
+                            path="/" 
+                            element={user ? <Navigate to="/dashboard" /> : <LandingPage />} 
+                        />
+                        
+                        {/* Sign Up and Sign In routes */}
+                        <Route path="/signin" element={<SignIn toggleForm={toggleForm} />} />
+                        <Route path="/signup" element={<SignUp toggleForm={toggleForm} />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} /> 
 
-                    {/* Protected routes that require authentication */}
-                    <Route 
-                        path="/dashboard" 
-                        element={user ? <Dashboard user={user} /> : <Navigate to="/signin" />} 
-                    />
-                    <Route 
-                        path="/analytics" 
-                        element={user ? <Analytics user={user} /> : <Navigate to="/signin" />} 
-                    />
-                    <Route 
-                        path="/categories" 
-                        element={user ? <Categories user={user} /> : <Navigate to="/signin" />} 
-                    />
-                    <Route 
-                        path="/profile" 
-                        element={user ? <UserProfile /> : <Navigate to="/signin" />} 
-                    />
-                    <Route 
-                        path="/record" 
-                        element={user ? <ManualUpload user={user} /> : <Navigate to="/signin" />} 
-                    />
-                </Routes>
-            </div>
-        </Router>
+                        {/* Protected routes that require authentication */}
+                        <Route 
+                            path="/dashboard" 
+                            element={user ? <Dashboard user={user} /> : <Navigate to="/signin" />} 
+                        />
+                        <Route 
+                            path="/analytics" 
+                            element={user ? <Analytics user={user} /> : <Navigate to="/signin" />} 
+                        />
+                        <Route 
+                            path="/categories" 
+                            element={user ? <Categories user={user} /> : <Navigate to="/signin" />} 
+                        />
+                        <Route 
+                            path="/profile" 
+                            element={user ? <UserProfile /> : <Navigate to="/signin" />} 
+                        />
+                        <Route 
+                            path="/manual-upload" 
+                            element={user ? <ManualUpload user={user} /> : <Navigate to="/signin" />} 
+                        />
+                    </Routes>
+                </div>
+            </Router>
+        </ErrorBoundary>
     );
 };
 
