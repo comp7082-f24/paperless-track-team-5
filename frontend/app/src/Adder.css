@@ -1,7 +1,8 @@
 .receipt-adder {
     position: fixed;
-    bottom: 50px;
-    right: 50px;
+    bottom: 20px; /* Adjust this if needed */
+    right: 15px;
+    z-index: 100;
 }
 
 .main-button {

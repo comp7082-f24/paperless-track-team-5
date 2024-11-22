@@ -17,6 +17,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import { Theme } from '../themes/Theme'
 
 const SearchBar = ({ onSearch, onFilterApply, categories = [] }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -158,8 +159,15 @@ const SearchBar = ({ onSearch, onFilterApply, categories = [] }) => {
                         />
                     </LocalizationProvider>
 
-                    <Button onClick={handleApplyFilters} variant="contained" color="primary" sx={{ marginTop: 2 }}>
-                        Apply Filters
+                    <Button onClick={handleApplyFilters} variant="contained" sx={{ 
+                                                                backgroundColor: Theme.palette.primary.dark, 
+                                                                color: Theme.palette.primary.contrastText, 
+                                                                marginTop: 2,
+                                                                '&:hover': {
+                                                                    background: Theme.palette.primary.main,
+                                                                    }
+                                                                }} >
+                        Apply
                     </Button>
                     <Button
                         onClick={() => {
@@ -171,15 +179,14 @@ const SearchBar = ({ onSearch, onFilterApply, categories = [] }) => {
                             toggleDrawer(false);
                         }}
                         sx={{
-                            background: 'linear-gradient(90deg, #00C6FB 0%, #005BEA 100%)',
-                            color: '#fff',
-                            marginTop: 1,
+                            color: Theme.palette.primary.dark, 
+                            borderColor: Theme.palette.primary.dark,
                             '&:hover': {
-                                background: 'linear-gradient(90deg, #00A6DB 0%, #004BBE 100%)',
-                            },
+                                background: Theme.palette.secondary.light,
+                                color: Theme.palette.accent.main}
                         }}
                     >
-                        Reset Filters
+                        Reset
                     </Button>
                 </Box>
             </Drawer>

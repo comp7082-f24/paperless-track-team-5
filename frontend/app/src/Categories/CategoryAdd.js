@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Fab, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box } from '@mui/material';
+import { Fab, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import { Theme } from '../themes/Theme'
+
 
 const db = getFirestore();
 
@@ -59,12 +61,34 @@ const CategoryAdd = ({ user, fetchCategories }) => {
         setCatDetails({ name: '', monthlyBudget: '', color: '#FFFFFF' });  // Reset form
     };
 
+    // const useStyles = makeStyles(() => ({
+    //     styleRed: {
+          
+    //     },
+    //     styleBlue: {
+    //       '&:hover': {
+    //         color: 'red'
+    //       }
+    //     }
+    //   }));
+
+    //   const classes = useStyles()
     return (
         <div className="category-add">
             {/* Main + button */}
             <Tooltip title="Add Category" placement="left">
-                <Fab color="primary" onClick={handleAddCategory} className="main-button">
-                    <AddIcon />
+                <Fab 
+                    sx={{
+                        '&:hover': {
+                            color: Theme.palette.accent.main
+                          }, 
+                        backgroundColor: Theme.palette.primary.main, 
+                        color: Theme.palette.primary.contrastText
+                        
+                    }}
+                    onClick={handleAddCategory}
+                    >
+                    <AddIcon   />
                 </Fab>
             </Tooltip>
 
@@ -105,10 +129,25 @@ const CategoryAdd = ({ user, fetchCategories }) => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCancel} color="secondary" variant="outlined">
+                    <Button onClick={handleCancel} 
+                            sx={{
+                                color: Theme.palette.primary.dark, 
+                                borderColor: Theme.palette.primary.dark, 
+                                '&:hover': {
+                                  background: Theme.palette.secondary.light,
+                                  color: Theme.palette.accent.main}}} 
+                            variant="outlined">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} color="primary" variant="outlined">
+                    <Button onClick={handleSave} 
+                            sx={{
+                                backgroundColor: Theme.palette.primary.dark, 
+                                color: Theme.palette.primary.contrastText,
+                                '&:hover': {
+                                  background: Theme.palette.primary.main,
+                                  }
+                                }} 
+                            variant="outlined">
                         Save
                     </Button>
                 </DialogActions>
